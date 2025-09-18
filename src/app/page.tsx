@@ -36,25 +36,39 @@ export default function Page() {
           <div className="mx-auto w-full max-w-2xl space-y-8">
             <div className="gap-2 flex justify-between items-center">
               <div className="flex-col flex flex-1 space-y-1.5">
-                <BlurFadeText
-                  delay={BLUR_FADE_DELAY}
-                  className="text-3xl font-bold tracking-tighter sm:text-4xl xl:text-5xl/none"
-                  yOffset={8}
-                  text={DATA.name}
-                />
+                {/* Name with waving hand */}
+                <BlurFade delay={BLUR_FADE_DELAY}>
+                  <h1 className="text-4xl font-bold tracking-tighter sm:text-5xl xl:text-6xl/none flex items-center">
+                    {DATA.name.replace("👋", "")}
+                    <span className="wave-hand ml-2 text-4xl">👋</span>
+                  </h1>
+                </BlurFade>
+                
                 <BlurFadeText
                   className="max-w-[600px] md:text-md"
                   delay={BLUR_FADE_DELAY}
                   text={DATA.description}
                 />
+
+                {/* Summary Section */}
+                <BlurFade delay={BLUR_FADE_DELAY * 4}>
+                  <Markdown className="max-w-full text-pretty text-sm">
+                    {DATA.summary}
+                  </Markdown>
+                </BlurFade>
+
+                {/* Location */}
                 <BlurFade delay={BLUR_FADE_DELAY * 2}>
-                  <div className="flex items-center gap-1 text-sm text-white font-bold">
+                  <div className="flex items-center gap-1 text-sm font-bold">
                     <span className="leading-none">📍</span>
-                    <Link href={DATA.locationLink} target="_blank" className="hover:underline">
+                    <Link
+                      href={DATA.locationLink}
+                      target="_blank"
+                      className="hover:underline text-foreground"
+                    >
                       {DATA.location}
                     </Link>
                   </div>
-
                 </BlurFade>
               </div>
 
@@ -68,15 +82,9 @@ export default function Page() {
           </div>
         </section>
 
-        {/* About Section */}
+        {/* About Section - Social links */}
         <section id="about">
-          <BlurFade delay={BLUR_FADE_DELAY * 3}>
-            <h2 className="text-xl font-bold">about me :D</h2>
-          </BlurFade>
-          <BlurFade delay={BLUR_FADE_DELAY * 4}>
-            <Markdown className="max-w-full text-pretty text-sm">
-              {DATA.summary}
-            </Markdown>
+          <BlurFade delay={BLUR_FADE_DELAY * 5}>
             <div className="flex flex-wrap gap-4 mt-4">
               {DATA.contact.social.map((social) => (
                 <a
@@ -84,29 +92,13 @@ export default function Page() {
                   href={social.url}
                   target="_blank"
                   rel="noreferrer"
-                  className="flex gap-1 justify-center items-center p-1 rounded-md hover:bg-gray-100 transition-opacity"
+                  className="flex gap-1 justify-center items-center p-3 rounded-md bg-muted/50 hover:bg-muted transition-all duration-300 hover:shadow-lg hover:shadow-primary/20"
                 >
-                  <social.icon className="size-4" />
+                  <social.icon className="size-5" />
                 </a>
               ))}
             </div>
           </BlurFade>
-        </section>
-
-        {/* Skills Section */}
-        <section id="skills">
-          <div className="flex min-h-0 flex-col gap-y-3">
-            <BlurFade delay={BLUR_FADE_DELAY * 9}>
-              <h2 className="text-xl font-bold">skills</h2>
-            </BlurFade>
-            <div className="flex flex-wrap gap-1">
-              {DATA.skills.map((skill, id) => (
-                <BlurFade key={skill} delay={BLUR_FADE_DELAY * 10 + id * 0.05}>
-                  <Badge key={skill}>{skill}</Badge>
-                </BlurFade>
-              ))}
-            </div>
-          </div>
         </section>
 
         {/* Tabs Section */}
@@ -161,18 +153,34 @@ export default function Page() {
           </Tabs>
         </section>
 
+        {/* Skills Section */}
+        <section id="skills">
+          <div className="flex min-h-0 flex-col gap-y-3">
+            <BlurFade delay={BLUR_FADE_DELAY * 9}>
+              <h2 className="text-3xl font-bold">skills</h2>
+            </BlurFade>
+            <div className="flex flex-wrap gap-1">
+              {DATA.skills.map((skill, id) => (
+                <BlurFade key={skill} delay={BLUR_FADE_DELAY * 10 + id * 0.05}>
+                  <Badge key={skill}>{skill}</Badge>
+                </BlurFade>
+              ))}
+            </div>
+          </div>
+        </section>
+
         {/* Projects Section */}
         <section id="projects">
           <div className="space-y-4 w-full">
             <BlurFade delay={BLUR_FADE_DELAY * 11}>
-              <h2 className="text-xl font-bold">featured projects</h2>
+              <h2 className="text-3xl font-bold">featured projects</h2>
             </BlurFade>
             <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 max-w-[800px] mx-auto">
               {DATA.projects.map((project, id) => (
                 <BlurFade key={project.title} delay={BLUR_FADE_DELAY * id * 0.05}>
                   <ProjectCard
                     href={project.href}
-                    githubUrl={project.githubUrl} // Add this line
+                    githubUrl={project.githubUrl}
                     key={project.title}
                     title={project.title}
                     active={project.active}
@@ -189,6 +197,31 @@ export default function Page() {
           </div>
         </section>
       </main>
+
+      {/* Add CSS for waving animation */}
+      <style jsx global>{`
+        .wave-hand {
+          display: inline-block;
+          animation: wave 2.5s infinite;
+          transform-origin: 70% 70%;
+          cursor: pointer;
+        }
+
+        .wave-hand:hover {
+          animation: wave 0.5s infinite;
+        }
+
+        @keyframes wave {
+          0% { transform: rotate(0deg); }
+          10% { transform: rotate(14deg); }
+          20% { transform: rotate(-8deg); }
+          30% { transform: rotate(14deg); }
+          40% { transform: rotate(-4deg); }
+          50% { transform: rotate(10deg); }
+          60% { transform: rotate(0deg); }
+          100% { transform: rotate(0deg); }
+        }
+      `}</style>
     </>
   );
 }

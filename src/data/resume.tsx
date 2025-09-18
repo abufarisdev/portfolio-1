@@ -7,9 +7,9 @@ export const DATA = {
   location: "Kolkata, India",
   locationLink: "https://www.google.com/maps/place/kolkata",
   description:
-    "web developer | ui/ux enthusiast | always building, always learning.",
+    "web developer | ui/ux enthusiast ",
   summary:
-    "I am a second-year B.Tech CSE student who loves building modern, responsive websites using React, Tailwind, and the latest web technologies. ",
+    "second-year undergrad who codes, quizzes, and occasionally beats friends at chess. ",
   avatarUrl: "/me.jpeg",
   skills: [
     "React",
@@ -76,8 +76,8 @@ export const DATA = {
       location: "Remote",
       title: "Student Member",
       logoUrl: "/work/gdgkolkata.png",
-      start: "Aug 2024",
-      end: "Nov 2024",
+      start: "Nov 2024",
+      end: "Present",
       description:
        "As a student member of GDG Kolkata, I actively participate in community events, collaborate with peers, and explore new technologies.",
     },
