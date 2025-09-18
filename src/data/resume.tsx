@@ -11,6 +11,7 @@ export const DATA = {
   summary:
     "second-year undergrad who codes, quizzes, and occasionally beats friends at chess. ",
   avatarUrl: "/me.jpeg",
+  hoverAvatarUrl:"/hoverAvatarUrl.jpg",
   skills: [
     "React",
     "Next.js",

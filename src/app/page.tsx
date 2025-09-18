@@ -84,12 +84,18 @@ export default function Page() {
                 </BlurFade>
               </div>
 
+              {/* Avatar with hover effect */}
               <BlurFade delay={BLUR_FADE_DELAY}>
-                <Avatar className="size-32 border">
-                  <AvatarImage alt={DATA.name} src={DATA.avatarUrl} />
+                <Avatar className="size-32 border group">
+                  <AvatarImage
+                    alt={DATA.name}
+                    src={DATA.avatarUrl}
+                    hoverSrc={DATA.hoverAvatarUrl}
+                  />
                   <AvatarFallback>{DATA.initials}</AvatarFallback>
                 </Avatar>
               </BlurFade>
+
             </div>
           </div>
         </section>
@@ -115,15 +121,15 @@ export default function Page() {
 
         {/* Tabs Section */}
         <section id="tabs" className="w-full">
-          <Tabs defaultValue="education" className="w-full">
-            <TabsList className="flex justify-center mb-6">
-              <TabsTrigger value="education">Education</TabsTrigger>
-              <TabsTrigger value="experience">Experience</TabsTrigger>
-            </TabsList>
+          <BlurFade delay={BLUR_FADE_DELAY}>
+            <Tabs defaultValue="education" className="w-full">
+              <TabsList className="flex justify-center mb-6">
+                <TabsTrigger value="education">Education</TabsTrigger>
+                <TabsTrigger value="experience">Experience</TabsTrigger>
+              </TabsList>
 
-            {/* Experience */}
-            <TabsContent value="experience">
-              <BlurFade delay={BLUR_FADE_DELAY}>
+              {/* Experience */}
+              <TabsContent value="experience" className="w-full">
                 <div className="space-y-4 w-full">
                   {DATA.work.map((work) => (
                     <ResumeCard
@@ -139,12 +145,10 @@ export default function Page() {
                     />
                   ))}
                 </div>
-              </BlurFade>
-            </TabsContent>
+              </TabsContent>
 
-            {/* Education */}
-            <TabsContent value="education">
-              <BlurFade delay={BLUR_FADE_DELAY}>
+              {/* Education */}
+              <TabsContent value="education" className="w-full">
                 <div className="space-y-4 w-full">
                   {DATA.education.map((edu) => (
                     <ResumeCard
@@ -160,9 +164,9 @@ export default function Page() {
                     />
                   ))}
                 </div>
-              </BlurFade>
-            </TabsContent>
-          </Tabs>
+              </TabsContent>
+            </Tabs>
+          </BlurFade>
         </section>
 
         {/* Skills Section */}

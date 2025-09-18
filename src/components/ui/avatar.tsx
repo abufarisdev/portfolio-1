@@ -12,7 +12,7 @@ const Avatar = React.forwardRef<
     ref={ref}
     className={cn(
       // base styles
-      "relative flex h-10 w-10 shrink-0 overflow-hidden rounded-full",
+      "relative flex h-16 w-16 shrink-0 overflow-hidden rounded-full",
       // glow ring + hover animation
       "ring-2 ring-white/20 shadow-lg transition hover:ring-purple-400/60 hover:scale-105 hover:shadow-purple-500/40",
       className
@@ -24,13 +24,30 @@ Avatar.displayName = AvatarPrimitive.Root.displayName
 
 const AvatarImage = React.forwardRef<
   React.ElementRef<typeof AvatarPrimitive.Image>,
-  React.ComponentPropsWithoutRef<typeof AvatarPrimitive.Image>
->(({ className, ...props }, ref) => (
-  <AvatarPrimitive.Image
-    ref={ref}
-    className={cn("aspect-square h-full w-full object-cover", className)}
-    {...props}
-  />
+  React.ComponentPropsWithoutRef<typeof AvatarPrimitive.Image> & {
+    hoverSrc?: string
+  }
+>(({ className, hoverSrc, ...props }, ref) => (
+  <div className="relative h-full w-full">
+    {/* Default image */}
+    <AvatarPrimitive.Image
+      ref={ref}
+      className={cn(
+        "absolute inset-0 h-full w-full object-cover transition-opacity duration-500",
+        "group-hover:opacity-0", // fade out on hover
+        className
+      )}
+      {...props}
+    />
+    {/* Hover image */}
+    {hoverSrc && (
+      <img
+        src={hoverSrc}
+        alt="hover avatar"
+        className="absolute inset-0 h-full w-full object-cover opacity-0 transition-opacity duration-500 group-hover:opacity-100"
+      />
+    )}
+  </div>
 ))
 AvatarImage.displayName = AvatarPrimitive.Image.displayName
 
