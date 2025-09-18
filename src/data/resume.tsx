@@ -1,7 +1,7 @@
 import { Icons } from "@/components/icons";
 
 export const DATA = {
-  name: "abu.",
+  name: "hi abu here👋",
   initials: "NC",
   url: "https://neerajkumar.vercel.app/",
   location: "Kolkata, India",
@@ -9,7 +9,7 @@ export const DATA = {
   description:
     "web developer | ui/ux enthusiast | always building, always learning.",
   summary:
-    "I am a second-year B.Tech CSE student who loves building modern, responsive websites using React, Tailwind, and the latest web technologies. Constantly learning and experimenting, I aim to turn ideas into polished digital realities. Outside coding, I enjoy exploring AI, solving problems, and discovering creative ways to make tech more interactive.",
+    "I am a second-year B.Tech CSE student who loves building modern, responsive websites using React, Tailwind, and the latest web technologies. ",
   avatarUrl: "/me.jpeg",
   skills: [
     "React",
@@ -37,8 +37,8 @@ export const DATA = {
         navbar: true,
       },
       {
-        url: "https://x.com/abufarisdev",
-        icon: Icons.x,
+        url: "https://linkedin.com/in/abufaris",
+        icon: Icons.linkedin,
 
         navbar: true,
       },

@@ -31,6 +31,7 @@ export default function Page() {
                 yOffset={8}
                 text={DATA.name}
               />
+              
               <BlurFadeText
                 className="max-w-[600px] md:text-md"
                 delay={BLUR_FADE_DELAY}
@@ -111,7 +112,6 @@ export default function Page() {
           <TabsContent value="experience">
             <BlurFade delay={BLUR_FADE_DELAY * 11}>
               <div className="space-y-4 w-full">
-                <h2 className="text-xl font-bold">Experience</h2>
                 {DATA.work.map((work, id) => (
                   <BlurFade
                     key={work.company}
@@ -138,7 +138,6 @@ export default function Page() {
           <TabsContent value="education">
             <BlurFade delay={BLUR_FADE_DELAY*11}>
             <div className="space-y-4 w-full">
-              <h2 className="text-xl font-bold">Education</h2>
               {DATA.education.map((edu, id) => (
                 <BlurFade
                   key={edu.school}
