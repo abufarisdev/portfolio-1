@@ -98,38 +98,36 @@ export default function Page() {
           </div>
         </div>
       </section>
-      <section id="tabs" className="w-full">
-  <Tabs defaultValue="projects" className="w-full">
+     <section id="tabs" className="w-full">
+  <Tabs defaultValue="experience" className="w-full">
     {/* Tab Buttons */}
     <TabsList className="flex justify-center mb-6">
-      <TabsTrigger value="projects">Projects</TabsTrigger>
-      <TabsTrigger value="education">Education</TabsTrigger>
+            <TabsTrigger value="education">Education</TabsTrigger>
+      <TabsTrigger value="experience">Experience</TabsTrigger>
+
     </TabsList>
 
-    {/* Projects Section */}
-    <TabsContent value="projects">
+    {/* Experience Section */}
+    <TabsContent value="experience">
       <div className="space-y-4 w-full">
-        <h2 className="text-xl font-bold">Projects</h2>
-        <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 max-w-[800px] mx-auto">
-          {DATA.projects.map((project, id) => (
-            <BlurFade
-              key={project.title}
-              delay={BLUR_FADE_DELAY * 12 + id * 0.05}
-            >
-              <ProjectCard
-                href={project.href}
-                title={project.title}
-                active={project.active}
-                description={project.description}
-                dates={project.dates}
-                tags={project.technologies}
-                image={project.image}
-                video={project.video}
-                links={project.links}
-              />
-            </BlurFade>
-          ))}
-        </div>
+        <h2 className="text-xl font-bold">Experience</h2>
+        {DATA.work.map((work, id) => (
+          <BlurFade
+            key={work.company}
+            delay={BLUR_FADE_DELAY * 12 + id * 0.05}
+          >
+            <ResumeCard
+              logoUrl={work.logoUrl}
+              altText={work.company}
+              title={work.company}
+              subtitle={work.title}
+              href={work.href}
+              badges={work.badges}
+              period={`${work.start} - ${work.end ?? "Present"}`}
+              description={work.description}
+            />
+          </BlurFade>
+        ))}
       </div>
     </TabsContent>
 
@@ -160,31 +158,7 @@ export default function Page() {
 </section>
 
       
-      <section id="work">
-        <div className="flex min-h-0 flex-col gap-y-3">
-          <BlurFade delay={BLUR_FADE_DELAY * 5}>
-            <h2 className="text-xl font-bold">Work Experience</h2>
-          </BlurFade>
-          {DATA.work.map((work, id) => (
-            <BlurFade
-              key={work.company}
-              delay={BLUR_FADE_DELAY * 6 + id * 0.05}
-            >
-              <ResumeCard
-                key={work.company}
-                logoUrl={work.logoUrl}
-                altText={work.company}
-                title={work.company}
-                subtitle={work.title}
-                href={work.href}
-                badges={work.badges}
-                period={`${work.start} - ${work.end ?? "Present"}`}
-                description={work.description}
-              />
-            </BlurFade>
-          ))}
-        </div>
-      </section>
+  
       
       <section id="projects">
         <div className="space-y-4 w-full">
