@@ -34,7 +34,12 @@ const TabsTrigger = React.forwardRef<
         "focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 " +
         "data-[state=active]:bg-background data-[state=active]:text-foreground " +
         "data-[state=active]:shadow-sm " +
-        "flex-1 text-center", // Make tabs take equal space and center text
+        "flex-1 text-center " +
+        // Transparent silver hover effect
+        "hover:bg-[rgba(236,240,241,0.3)] hover:backdrop-blur-sm hover:border hover:border-[rgba(255,255,255,0.2)] " +
+        "hover:shadow-[0_4px_12px_rgba(189,195,199,0.25)] hover:text-foreground " +
+        // Smooth transition
+        "transition-all duration-300 ease-in-out",
       className
     )}
     {...props}

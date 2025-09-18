@@ -7,6 +7,8 @@ import { Badge } from "@/components/ui/badge";
 import { DATA } from "@/data/resume";
 import Link from "next/link";
 import Markdown from "react-markdown";
+import AboutMeBot from "@/components/AboutMeBot";
+
 import {
   Tabs,
   TabsList,
@@ -63,7 +65,7 @@ export default function Page() {
 
       <section id="about">
         <BlurFade delay={BLUR_FADE_DELAY * 3}>
-          <h2 className="text-xl font-bold">About</h2>
+          <h2 className="text-xl font-bold">about me :D</h2>
         </BlurFade>
         <BlurFade delay={BLUR_FADE_DELAY * 4}>
           <Markdown className="max-w-full text-pretty text-sm">
@@ -88,7 +90,7 @@ export default function Page() {
       <section id="skills">
         <div className="flex min-h-0 flex-col gap-y-3">
           <BlurFade delay={BLUR_FADE_DELAY * 9}>
-            <h2 className="text-xl font-bold">Skills</h2>
+            <h2 className="text-xl font-bold">skills</h2>
           </BlurFade>
           <div className="flex flex-wrap gap-1">
             {DATA.skills.map((skill, id) => (
@@ -110,13 +112,10 @@ export default function Page() {
 
           {/* Experience Section */}
           <TabsContent value="experience">
-            <BlurFade delay={BLUR_FADE_DELAY * 11}>
+            <BlurFade delay={BLUR_FADE_DELAY}>
               <div className="space-y-4 w-full">
                 {DATA.work.map((work, id) => (
-                  <BlurFade
-                    key={work.company}
-                    delay={BLUR_FADE_DELAY * 12 + id * 0.05}
-                  >
+                  
                     <ResumeCard
                       logoUrl={work.logoUrl}
                       altText={work.company}
@@ -127,7 +126,7 @@ export default function Page() {
                       period={`${work.start} - ${work.end ?? "Present"}`}
                       description={work.description}
                     />
-                  </BlurFade>
+                
                 ))}
               </div>
             </BlurFade>
@@ -136,12 +135,12 @@ export default function Page() {
 
           {/* Education Section */}
           <TabsContent value="education">
-            <BlurFade delay={BLUR_FADE_DELAY*11}>
+            <BlurFade delay={BLUR_FADE_DELAY}>
             <div className="space-y-4 w-full">
               {DATA.education.map((edu, id) => (
                 <BlurFade
                   key={edu.school}
-                  delay={BLUR_FADE_DELAY * 12 + id * 0.05}
+                  delay={BLUR_FADE_DELAY}
                 >
                   <ResumeCard
                     logoUrl={edu.logoUrl}
@@ -167,13 +166,13 @@ export default function Page() {
       <section id="projects">
         <div className="space-y-4 w-full">
           <BlurFade delay={BLUR_FADE_DELAY * 11}>
-            <h2 className="text-xl font-bold">Projects</h2>
+            <h2 className="text-xl font-bold">featured projects</h2>
           </BlurFade>
           <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 max-w-[800px] mx-auto">
             {DATA.projects.map((project, id) => (
               <BlurFade
                 key={project.title}
-                delay={BLUR_FADE_DELAY * 12 + id * 0.05}
+                delay={BLUR_FADE_DELAY * id* 0.05}
               >
                 <ProjectCard
                   href={project.href}
