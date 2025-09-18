@@ -36,18 +36,18 @@ export default function Page() {
                 delay={BLUR_FADE_DELAY}
                 text={DATA.description}
               />
-<BlurFade delay={BLUR_FADE_DELAY * 2}>
-  <div className="flex items-center gap-1 text-sm text-white font-bold">
-    <span>📍</span>
-    <Link
-      href={DATA.locationLink}
-      target="_blank"
-      className="hover:underline"
-    >
-      {DATA.location}
-    </Link>
-  </div>
-</BlurFade>
+              <BlurFade delay={BLUR_FADE_DELAY * 2}>
+                <div className="flex items-center gap-1 text-sm text-white font-bold">
+                  <span>📍</span>
+                  <Link
+                    href={DATA.locationLink}
+                    target="_blank"
+                    className="hover:underline"
+                  >
+                    {DATA.location}
+                  </Link>
+                </div>
+              </BlurFade>
 
             </div>
             <BlurFade delay={BLUR_FADE_DELAY}>
@@ -59,7 +59,7 @@ export default function Page() {
           </div>
         </div>
       </section>
-      
+
       <section id="about">
         <BlurFade delay={BLUR_FADE_DELAY * 3}>
           <h2 className="text-xl font-bold">About</h2>
@@ -83,7 +83,7 @@ export default function Page() {
           </div>
         </BlurFade>
       </section>
-      
+
       <section id="skills">
         <div className="flex min-h-0 flex-col gap-y-3">
           <BlurFade delay={BLUR_FADE_DELAY * 9}>
@@ -98,68 +98,73 @@ export default function Page() {
           </div>
         </div>
       </section>
-     <section id="tabs" className="w-full">
-  <Tabs defaultValue="experience" className="w-full">
-    {/* Tab Buttons */}
-    <TabsList className="flex justify-center mb-6">
+      <section id="tabs" className="w-full">
+        <Tabs defaultValue="education" className="w-full">
+          {/* Tab Buttons */}
+          <TabsList className="flex justify-center mb-6">
             <TabsTrigger value="education">Education</TabsTrigger>
-      <TabsTrigger value="experience">Experience</TabsTrigger>
+            <TabsTrigger value="experience">Experience</TabsTrigger>
 
-    </TabsList>
+          </TabsList>
 
-    {/* Experience Section */}
-    <TabsContent value="experience">
-      <div className="space-y-4 w-full">
-        <h2 className="text-xl font-bold">Experience</h2>
-        {DATA.work.map((work, id) => (
-          <BlurFade
-            key={work.company}
-            delay={BLUR_FADE_DELAY * 12 + id * 0.05}
-          >
-            <ResumeCard
-              logoUrl={work.logoUrl}
-              altText={work.company}
-              title={work.company}
-              subtitle={work.title}
-              href={work.href}
-              badges={work.badges}
-              period={`${work.start} - ${work.end ?? "Present"}`}
-              description={work.description}
-            />
-          </BlurFade>
-        ))}
-      </div>
-    </TabsContent>
+          {/* Experience Section */}
+          <TabsContent value="experience">
+            <BlurFade delay={BLUR_FADE_DELAY * 11}>
+              <div className="space-y-4 w-full">
+                <h2 className="text-xl font-bold">Experience</h2>
+                {DATA.work.map((work, id) => (
+                  <BlurFade
+                    key={work.company}
+                    delay={BLUR_FADE_DELAY * 12 + id * 0.05}
+                  >
+                    <ResumeCard
+                      logoUrl={work.logoUrl}
+                      altText={work.company}
+                      title={work.company}
+                      subtitle={work.title}
+                      href={work.href}
+                      badges={work.badges}
+                      period={`${work.start} - ${work.end ?? "Present"}`}
+                      description={work.description}
+                    />
+                  </BlurFade>
+                ))}
+              </div>
+            </BlurFade>
+          </TabsContent>
 
-    {/* Education Section */}
-    <TabsContent value="education">
-      <div className="space-y-4 w-full">
-        <h2 className="text-xl font-bold">Education</h2>
-        {DATA.education.map((edu, id) => (
-          <BlurFade
-            key={edu.school}
-            delay={BLUR_FADE_DELAY * 12 + id * 0.05}
-          >
-            <ResumeCard
-              logoUrl={edu.logoUrl}
-              altText={edu.school}
-              title={edu.school}
-              subtitle={edu.degree}
-              href={edu.href}
-              badges={edu.badges}
-              period={`${edu.start} - ${edu.end ?? "Present"}`}
-              description={edu.description}
-            />
-          </BlurFade>
-        ))}
-      </div>
-    </TabsContent>
-  </Tabs>
-</section>
 
-      
-  
-      
+          {/* Education Section */}
+          <TabsContent value="education">
+            <BlurFade delay={BLUR_FADE_DELAY*11}>
+            <div className="space-y-4 w-full">
+              <h2 className="text-xl font-bold">Education</h2>
+              {DATA.education.map((edu, id) => (
+                <BlurFade
+                  key={edu.school}
+                  delay={BLUR_FADE_DELAY * 12 + id * 0.05}
+                >
+                  <ResumeCard
+                    logoUrl={edu.logoUrl}
+                    altText={edu.school}
+                    title={edu.school}
+                    subtitle={edu.degree}
+                    href={edu.href}
+                    badges={edu.badges}
+                    period={`${edu.start} - ${edu.end ?? "Present"}`}
+                    description={edu.description}
+                  />
+                </BlurFade>
+              ))}
+            </div>
+            </BlurFade>
+          </TabsContent>
+        </Tabs>
+      </section>
+
+
+
+
       <section id="projects">
         <div className="space-y-4 w-full">
           <BlurFade delay={BLUR_FADE_DELAY * 11}>
