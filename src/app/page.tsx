@@ -70,6 +70,13 @@ export default function Page() {
                     </Link>
                   </div>
                 </BlurFade>
+
+                {/* Chatbot Invitation */}
+                <BlurFade delay={BLUR_FADE_DELAY * 3}>
+                  <p className="text-xs text-muted-foreground mt-2 italic">
+                    Want to know more about me? Ask my chatbot!
+                  </p>
+                </BlurFade>
               </div>
 
               <BlurFade delay={BLUR_FADE_DELAY}>
