@@ -29,11 +29,16 @@ export default function Page() {
         <ModeToggle />
       </div>
 
+      {/* Floating Chatbot */}
+      <div className="fixed bottom-4 right-4 z-50">
+        <AboutMeBot />
+      </div>
+
       {/* Main page content */}
-      <main className="flex flex-col min-h-[100dvh] space-y-10">
+      <main className="flex flex-col min-h-[100dvh] space-y-8">
         {/* Hero Section */}
         <section id="hero">
-          <div className="mx-auto w-full max-w-2xl space-y-8">
+          <div className="mx-auto w-full max-w-2xl space-y-6">
             <div className="gap-2 flex justify-between items-center">
               <div className="flex-col flex flex-1 space-y-1.5">
                 {/* Name with waving hand */}
@@ -43,7 +48,7 @@ export default function Page() {
                     <span className="wave-hand ml-2 text-4xl">👋</span>
                   </h1>
                 </BlurFade>
-                
+
                 <BlurFadeText
                   className="max-w-[600px] md:text-md"
                   delay={BLUR_FADE_DELAY}
@@ -73,8 +78,8 @@ export default function Page() {
 
                 {/* Chatbot Invitation */}
                 <BlurFade delay={BLUR_FADE_DELAY * 3}>
-                  <p className="text-xs text-muted-foreground mt-2 italic">
-                    Want to know more about me? Ask my chatbot!
+                  <p className="text-xs text-muted-foreground mt-1 italic">
+                    Want to know more about me? Ask my chatbot!!
                   </p>
                 </BlurFade>
               </div>
@@ -89,10 +94,10 @@ export default function Page() {
           </div>
         </section>
 
-        {/* About Section - Social links */}
-        <section id="about">
+        {/* About Section */}
+        <section id="about" className="mt-2">
           <BlurFade delay={BLUR_FADE_DELAY * 5}>
-            <div className="flex flex-wrap gap-4 mt-4">
+            <div className="flex flex-wrap gap-4">
               {DATA.contact.social.map((social) => (
                 <a
                   key={social.url}
@@ -169,7 +174,15 @@ export default function Page() {
             <div className="flex flex-wrap gap-1">
               {DATA.skills.map((skill, id) => (
                 <BlurFade key={skill} delay={BLUR_FADE_DELAY * 10 + id * 0.05}>
-                  <Badge key={skill}>{skill}</Badge>
+                  <Badge
+                    key={skill}
+                    className="relative overflow-hidden transition-all duration-500 hover:text-white
+                    before:absolute before:inset-0 before:bg-gradient-to-r before:from-purple-500 before:to-blue-500
+                    before:opacity-0 before:transition-opacity before:duration-500 hover:before:opacity-100
+                    hover:scale-105"
+                  >
+                    <span className="relative z-10">{skill}</span>
+                  </Badge>
                 </BlurFade>
               ))}
             </div>
