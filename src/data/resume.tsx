@@ -107,8 +107,9 @@ export const DATA = {
 
   projects: [
     {
-      title: "Crypton - Real Time Crypto Tracking App",
+      title: "Crypton - Real Time Crypto Tracker",
       href: "https://crypton-wheat.vercel.app/",
+      githubUrl : "https://github.com/abufarisdev/crypton.git",
       dates: "September'25",
       active: true,
       description:
@@ -125,6 +126,7 @@ export const DATA = {
           type: "Website",
           href: "https://crypton-wheat.vercel.app/",
           icon: <Icons.globe className="size-3" />,
+  
         },
       ],
       image: "/projects/crypton.png",

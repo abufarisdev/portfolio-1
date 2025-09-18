@@ -172,6 +172,7 @@ export default function Page() {
                 <BlurFade key={project.title} delay={BLUR_FADE_DELAY * id * 0.05}>
                   <ProjectCard
                     href={project.href}
+                    githubUrl={project.githubUrl} // Add this line
                     key={project.title}
                     title={project.title}
                     active={project.active}

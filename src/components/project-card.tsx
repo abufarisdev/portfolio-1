@@ -10,10 +10,12 @@ import { cn } from "@/lib/utils";
 import Image from "next/image";
 import Link from "next/link";
 import Markdown from "react-markdown";
+import { Github, ExternalLink } from "lucide-react"; // Import the icons
 
 interface Props {
   title: string;
   href?: string;
+  githubUrl?: string; // Add githubUrl prop
   active?: boolean;
   description: string;
   dates: string;
@@ -32,6 +34,7 @@ interface Props {
 export function ProjectCard({
   title,
   href,
+  githubUrl, 
   active,
   description,
   dates,
@@ -105,18 +108,27 @@ export function ProjectCard({
         )}
       </CardContent>
       <CardFooter className="px-2 pb-2">
-        {links && links.length > 0 && (
-          <div className="flex flex-row flex-wrap items-start gap-1">
-            {links?.map((link, idx) => (
-              <Link href={link?.href} key={idx} target="_blank">
-                <Badge key={idx} className="flex gap-2 px-2 py-1 text-[10px]">
-                  {link.icon}
-                  {link.type}
-                </Badge>
-              </Link>
-            ))}
-          </div>
-        )}
+        <div className="flex flex-row flex-wrap items-start gap-1">
+          {/* Add GitHub link if provided */}
+          {githubUrl && (
+            <Link href={githubUrl} target="_blank">
+              <Badge className="flex gap-2 px-2 py-1 text-[10px]">
+                <Github className="h-3 w-3" />
+                GitHub
+              </Badge>
+            </Link>
+          )}
+          
+          {/* Add website link if provided */}
+          {href && (
+            <Link href={href} target="_blank">
+              <Badge className="flex gap-2 px-2 py-1 text-[10px]">
+                <ExternalLink className="h-3 w-3" />
+                Website
+              </Badge>
+            </Link>
+          )}
+        </div>
       </CardFooter>
     </Card>
   );
