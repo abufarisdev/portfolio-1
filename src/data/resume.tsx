@@ -82,6 +82,29 @@ export const DATA = {
        "As a student member of GDG Kolkata, I actively participate in community events, collaborate with peers, and explore new technologies.",
     },
   ],
+  education: [
+  {
+    school: "Swami Vivekananda University",
+    degree: "B.Tech in Computer Science and Engineering",
+    start: "2023",
+    end: "2027",
+    logoUrl: "/education/svu-logo.png", 
+    href: "https://svu.ac.in",
+    badges: ["CSE"],
+    description: "Currently pursuing my B.Tech in Computer Science and Engineering with a focus on software development, algorithms, and systems."
+  },
+  {
+    school: "St. Augustine's Day School, Kolkata",
+    degree: "Science (PCM)",
+    start: "2021",
+    end: "2023",
+    logoUrl: "/education/stads.jpeg",
+    href: "#",
+    badges: ["ISC"],
+    description: "Completed high school with a focus on Physics, Chemistry, and Mathematics. Participated in quizzes, football, and chess."
+  }
+],
+
   projects: [
     {
       title: "Crypton - Real Time Crypto Tracking App",

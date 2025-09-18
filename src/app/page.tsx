@@ -7,6 +7,14 @@ import { Badge } from "@/components/ui/badge";
 import { DATA } from "@/data/resume";
 import Link from "next/link";
 import Markdown from "react-markdown";
+import {
+  Tabs,
+  TabsList,
+  TabsTrigger,
+  TabsContent,
+} from "@/components/ui/tabs";
+
+
 
 const BLUR_FADE_DELAY = 0.04;
 
@@ -28,16 +36,19 @@ export default function Page() {
                 delay={BLUR_FADE_DELAY}
                 text={DATA.description}
               />
-              <div className="flex items-center gap-1 text-sm text-white font-bold">
-                <span>📍</span>
-                <Link
-                  href={DATA.locationLink}
-                  target="_blank"
-                  className="hover:underline"
-                >
-                  {DATA.location}
-                </Link>
-              </div>
+<BlurFade delay={BLUR_FADE_DELAY * 2}>
+  <div className="flex items-center gap-1 text-sm text-white font-bold">
+    <span>📍</span>
+    <Link
+      href={DATA.locationLink}
+      target="_blank"
+      className="hover:underline"
+    >
+      {DATA.location}
+    </Link>
+  </div>
+</BlurFade>
+
             </div>
             <BlurFade delay={BLUR_FADE_DELAY}>
               <Avatar className="size-32 border">
@@ -87,6 +98,67 @@ export default function Page() {
           </div>
         </div>
       </section>
+      <section id="tabs" className="w-full">
+  <Tabs defaultValue="projects" className="w-full">
+    {/* Tab Buttons */}
+    <TabsList className="flex justify-center mb-6">
+      <TabsTrigger value="projects">Projects</TabsTrigger>
+      <TabsTrigger value="education">Education</TabsTrigger>
+    </TabsList>
+
+    {/* Projects Section */}
+    <TabsContent value="projects">
+      <div className="space-y-4 w-full">
+        <h2 className="text-xl font-bold">Projects</h2>
+        <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 max-w-[800px] mx-auto">
+          {DATA.projects.map((project, id) => (
+            <BlurFade
+              key={project.title}
+              delay={BLUR_FADE_DELAY * 12 + id * 0.05}
+            >
+              <ProjectCard
+                href={project.href}
+                title={project.title}
+                active={project.active}
+                description={project.description}
+                dates={project.dates}
+                tags={project.technologies}
+                image={project.image}
+                video={project.video}
+                links={project.links}
+              />
+            </BlurFade>
+          ))}
+        </div>
+      </div>
+    </TabsContent>
+
+    {/* Education Section */}
+    <TabsContent value="education">
+      <div className="space-y-4 w-full">
+        <h2 className="text-xl font-bold">Education</h2>
+        {DATA.education.map((edu, id) => (
+          <BlurFade
+            key={edu.school}
+            delay={BLUR_FADE_DELAY * 12 + id * 0.05}
+          >
+            <ResumeCard
+              logoUrl={edu.logoUrl}
+              altText={edu.school}
+              title={edu.school}
+              subtitle={edu.degree}
+              href={edu.href}
+              badges={edu.badges}
+              period={`${edu.start} - ${edu.end ?? "Present"}`}
+              description={edu.description}
+            />
+          </BlurFade>
+        ))}
+      </div>
+    </TabsContent>
+  </Tabs>
+</section>
+
       
       <section id="work">
         <div className="flex min-h-0 flex-col gap-y-3">
