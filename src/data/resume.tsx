@@ -7,27 +7,20 @@ export const DATA = {
   location: "Kolkata, India",
   locationLink: "https://www.google.com/maps/place/kolkata",
   description:
-    "web developer | ui/ux enthusiast ",
+    "full stack developer",
   summary:
     "second-year undergrad who codes, quizzes, and occasionally beats friends at chess. ",
   avatarUrl: "/me.jpeg",
   hoverAvatarUrl:"/hoverAvatarUrl.jpg",
-  skills: [
-    "React",
-    "Next.js",
-    "Typescript",
-    "Node.js",
-    "Python",
-    "Postgres",
-    "MongoDB",
-    "TailwindCSS",
-    "Zustand",
-    "TanStack Query",
-    "React Native",
-    "Shadcn UI",
-    "Firebase",
-    "Express.js",
-  ],
+// inside data/resume.ts
+skills: {
+  Languages: ["Java", "Python", "C++"],
+  Frameworks: ["React", "Next.js", "Express"],
+  Backend: ["Node.js", "REST APIs", "Microservices"],
+  Databases: ["Postgres", "MongoDB", "SQL"],
+  Tools: ["Git", "Docker", "Linux"],
+},
+
   contact: {
     email: "abufariskolkata@gmail.com",
     social: [
@@ -87,8 +80,8 @@ export const DATA = {
   {
     school: "Swami Vivekananda University",
     degree: "B.Tech in Computer Science and Engineering",
-    start: "2023",
-    end: "2027",
+    start: "2024",
+    end: "2028",
     logoUrl: "/education/svu-logo.png", 
     href: "https://svu.ac.in",
     badges: ["CSE"],

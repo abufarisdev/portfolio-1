@@ -168,30 +168,55 @@ export default function Page() {
             </Tabs>
           </BlurFade>
         </section>
+{/* Skills Section */}
+<section id="skills" className="mt-16">
+  <div className="flex flex-col gap-y-10">
+    {/* Centered Heading */}
+    <BlurFade delay={BLUR_FADE_DELAY * 9}>
+      <h2 className="text-4xl font-bold text-center bg-gradient-to-r from-gray-200 to-gray-400 bg-clip-text text-transparent">
+        Skills
+      </h2>
+    </BlurFade>
 
-        {/* Skills Section */}
-        <section id="skills">
-          <div className="flex min-h-0 flex-col gap-y-3">
-            <BlurFade delay={BLUR_FADE_DELAY * 9}>
-              <h2 className="text-3xl font-bold">skills</h2>
-            </BlurFade>
-            <div className="flex flex-wrap gap-1">
-              {DATA.skills.map((skill, id) => (
-                <BlurFade key={skill} delay={BLUR_FADE_DELAY * 10 + id * 0.05}>
+    {/* Grid for Skill Categories with Theme-Matching Cards */}
+    <div className="grid grid-cols-1 md:grid-cols-2 gap-5 w-full">
+      {Object.entries(DATA.skills).map(([category, skills], idx) => (
+        <BlurFade
+          key={category}
+          delay={BLUR_FADE_DELAY * 10 + idx * 0.1}
+          className="w-full"
+        >
+          {/* Skill Category Card */}
+          <div className="relative group">
+            {/* Subtle glow effect */}
+            <div className="absolute -inset-0.5 bg-gradient-to-r from-blue-700/30 to-purple-700/30 rounded-xl opacity-0 group-hover:opacity-50 transition duration-500 blur-sm"></div>
+            
+            {/* Main card content */}
+            <div className="relative bg-card border border-border rounded-xl p-5 h-full transition-all duration-300 hover:border-blue-700/30">
+              {/* Category Heading */}
+              <h3 className="text-lg font-semibold mb-4 text-center text-foreground">
+                {category}
+              </h3>
+
+              {/* Skills Badges */}
+              <div className="flex flex-wrap gap-2 justify-center">
+                {skills.map((skill) => (
                   <Badge
                     key={skill}
-                    className="relative overflow-hidden transition-all duration-500 hover:text-white
-                    before:absolute before:inset-0 before:bg-gradient-to-r before:from-purple-500 before:to-blue-500
-                    before:opacity-0 before:transition-opacity before:duration-500 hover:before:opacity-100
-                    hover:scale-105"
+                    variant={category.toLowerCase() as any}
+                    className="hover:scale-105 transition-transform border-0 shadow-md"
                   >
-                    <span className="relative z-10">{skill}</span>
+                    {skill}
                   </Badge>
-                </BlurFade>
-              ))}
+                ))}
+              </div>
             </div>
           </div>
-        </section>
+        </BlurFade>
+      ))}
+    </div>
+  </div>
+</section>
 
         {/* Projects Section */}
         <section id="projects">
