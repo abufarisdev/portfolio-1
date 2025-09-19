@@ -1,5 +1,6 @@
 import { ThemeProvider } from "@/components/theme-provider";
 import { TooltipProvider } from "@/components/ui/tooltip";
+import { Navbar } from "@/components/navbar"; // ⬅️ add this
 import { DATA } from "@/data/resume";
 import { cn } from "@/lib/utils";
 import type { Metadata } from "next";
@@ -61,7 +62,11 @@ export default function RootLayout({
         )}
       >
         <ThemeProvider attribute="class" defaultTheme="system">
-          <TooltipProvider delayDuration={0}>{children}</TooltipProvider>
+          <TooltipProvider delayDuration={0}>
+            {/* Sticky Transparent Navbar */}
+            <Navbar />
+            <main>{children}</main>
+          </TooltipProvider>
         </ThemeProvider>
       </body>
     </html>
