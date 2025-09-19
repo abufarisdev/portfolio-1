@@ -97,4 +97,63 @@
   60% { transform: rotate(0deg); }
   100% { transform: rotate(0deg); }
 }
- 
+ /* Magic Cursor Styles */
+.magic-cursor {
+  position: fixed;
+  width: 30px;
+  height: 30px;
+  background: radial-gradient(circle, rgba(91, 133, 255, 0.6) 0%, rgba(91, 133, 255, 0.3) 40%, transparent 70%);
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 9999;
+  transform: translate(-50%, -50%);
+  filter: blur(4px);
+  transition: 
+    width 0.2s ease,
+    height 0.2s ease,
+    background 0.2s ease;
+}
+
+.magic-cursor.active {
+  width: 20px;
+  height: 20px;
+  background: radial-gradient(circle, rgba(147, 197, 253, 0.8) 0%, rgba(147, 197, 253, 0.4) 40%, transparent 70%);
+}
+
+/* Ripple Container */
+.ripple-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 9998;
+}
+
+/* Ripple Effect */
+.ripple {
+  position: absolute;
+  width: 100px;
+  height: 100px;
+  background: radial-gradient(circle, rgba(147, 197, 253, 0.3) 0%, transparent 70%);
+  border-radius: 50%;
+  transform: translate(-50%, -50%) scale(0);
+  animation: ripple-effect 1s ease-out;
+}
+
+@keyframes ripple-effect {
+  to {
+    transform: translate(-50%, -50%) scale(4);
+    opacity: 0;
+  }
+}
+
+/* Interactive element hover states */
+a:hover ~ .magic-cursor,
+button:hover ~ .magic-cursor,
+.badge:hover ~ .magic-cursor {
+  width: 40px;
+  height: 40px;
+  background: radial-gradient(circle, rgba(147, 197, 253, 0.8) 0%, rgba(147, 197, 253, 0.5) 40%, transparent 70%);
+}

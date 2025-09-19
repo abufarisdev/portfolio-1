@@ -82,7 +82,7 @@ export function ProjectCard({
           </CardTitle>
           <time className="font-sans text-xs">{dates}</time>
           {active && (
-            <Badge className="ml-4 group-hover:bg-primary group-hover:text-primary-foreground transition-colors duration-500" variant="outline">
+            <Badge className="ml-4 group-hover:bg-primary group-hover:text-primary-foreground transition-colors duration-500" variant="secondary">
               Active
             </Badge>
           )}
