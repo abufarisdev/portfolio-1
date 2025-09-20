@@ -1,7 +1,7 @@
 import { Icons } from "@/components/icons";
 
 export const DATA = {
-  name: "hi abu here👋",
+  name: "hey, abu here👋",
   initials: "AF",
   url: "https://abufarisportfolio.vercel.app/",
   location: "Kolkata, India",

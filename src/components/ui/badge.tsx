@@ -16,6 +16,7 @@ const badgeVariants = cva(
         databases: "border border-red-500/30 bg-red-500/10 text-red-400",
         practices: "border border-yellow-500/30 bg-yellow-500/10 text-yellow-500",
         tools: "border border-amber-500/30 bg-amber-500/10 text-amber-400",
+        devops: "border border-slate-500/30 bg-slate-500/10 text-slate-400", 
       },
     },
     defaultVariants: {

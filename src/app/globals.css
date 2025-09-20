@@ -114,13 +114,37 @@
   transition: 
     width 0.2s ease,
     height 0.2s ease,
-    background 0.2s ease;
+    background 0.2s ease,
+    transform 0.3s cubic-bezier(0.17, 0.67, 0.83, 0.67);
 }
 
 .magic-cursor.active {
   width: 20px;
   height: 20px;
   background: radial-gradient(circle, rgba(200, 105, 60, 0.8) 0%, rgba(200, 105, 60, 0.4) 40%, transparent 70%);
+}
+
+/* Shape-shifting cursor variations */
+.magic-cursor.circle {
+  border-radius: 50%;
+}
+
+.magic-cursor.square {
+  border-radius: 6px;
+  width: 24px;
+  height: 24px;
+}
+
+.magic-cursor.triangle {
+  clip-path: polygon(50% 0%, 0% 100%, 100% 100%);
+  width: 28px;
+  height: 24px;
+}
+
+.magic-cursor.hexagon {
+  clip-path: polygon(25% 0%, 75% 0%, 100% 50%, 75% 100%, 25% 100%, 0% 50%);
+  width: 28px;
+  height: 24px;
 }
 
 /* Ripple Container */
@@ -152,6 +176,52 @@
   }
 }
 
+/* Particle Trail Effect - The best one! */
+.particle-trail {
+  position: fixed;
+  width: 4px;
+  height: 4px;
+  background: rgba(180, 85, 40, 0.6);
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 9997;
+  animation: particle-fade 1s ease-out forwards;
+}
+
+@keyframes particle-fade {
+  0% {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1);
+  }
+  100% {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(0);
+  }
+}
+
+/* Ghost Trail Effect */
+.ghost-cursor {
+  position: fixed;
+  width: 24px;
+  height: 24px;
+  border: 2px solid rgba(180, 85, 40, 0.3);
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 9996;
+  animation: ghost-fade 1.5s ease-out forwards;
+}
+
+@keyframes ghost-fade {
+  0% {
+    opacity: 0.7;
+    transform: translate(-50%, -50%) scale(1);
+  }
+  100% {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(1.5);
+  }
+}
+
 /* Interactive element hover states */
 a:hover ~ .magic-cursor,
 button:hover ~ .magic-cursor,
@@ -159,6 +229,36 @@ button:hover ~ .magic-cursor,
   width: 40px;
   height: 40px;
   background: radial-gradient(circle, rgba(200, 105, 60, 0.8) 0%, rgba(200, 105, 60, 0.5) 40%, transparent 70%);
+}
+
+/* Magnetic hover effect for interactive elements */
+.magnetic-element {
+  transition: transform 0.3s cubic-bezier(0.17, 0.67, 0.83, 0.67);
+}
+
+.magnetic-element:hover {
+  transform: scale(1.05);
+}
+
+/* Text reveal effect for headings */
+.text-reveal {
+  position: relative;
+  overflow: hidden;
+}
+
+.text-reveal::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(180, 85, 40, 0.3), transparent);
+  transition: left 0.5s ease;
+}
+
+.text-reveal:hover::before {
+  left: 100%;
 }
 
 /* Additional rusty brown theme utilities */
@@ -189,6 +289,7 @@ button:hover ~ .magic-cursor,
 .text-muted-bright {
   color: hsl(15, 20%, 80%);
 }
+
 /* Refined blog content styles */
 .blog-content-refined {
   color: #fef3c7;
@@ -392,4 +493,61 @@ body, html {
   background: hsl(var(--primary));
   border: 2px solid hsl(var(--background));
   box-shadow: 0 0 0 2px hsl(var(--primary) / 0.2);
+}
+
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+  .magic-cursor,
+  .particle-trail,
+  .ghost-cursor,
+  .ripple,
+  .wave-hand {
+    animation: none !important;
+    transition: none !important;
+  }
+  
+  .magnetic-element,
+  .text-reveal::before {
+    transition: none !important;
+  }
+}
+
+/* Custom styles for project cards */
+.line-clamp-2 {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.line-clamp-3 {
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/* Smooth backdrop blur support */
+@supports (backdrop-filter: blur(10px)) {
+  .backdrop-blur-sm {
+    backdrop-filter: blur(8px);
+  }
+}
+
+/* Enhanced hover effects */
+.project-card-hover {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.project-card-hover:hover {
+  transform: translateY(-4px) scale(1.02);
+  box-shadow: 0 20px 40px rgba(180, 83, 9, 0.15);
+}
+
+/* Gradient text effects */
+.gradient-text {
+  background: linear-gradient(135deg, #f59e0b 0%, #b45309 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
 }

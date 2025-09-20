@@ -10,7 +10,7 @@ import { cn } from "@/lib/utils";
 import Image from "next/image";
 import Link from "next/link";
 import Markdown from "react-markdown";
-import { Github, ExternalLink } from "lucide-react";
+import { Github, ExternalLink, ArrowRight } from "lucide-react";
 
 interface Props {
   title: string;
@@ -47,59 +47,85 @@ export function ProjectCard({
 }: Props) {
   return (
     <Card
-      className={
-        "flex flex-col overflow-hidden border-2 hover:shadow-2xl transition-all duration-500 ease-out h-full group hover:scale-[1.02] hover:-translate-y-2 hover:border-primary/30"
-      }
+      className={cn(
+        "flex flex-col overflow-hidden border border-gray-700 bg-gradient-to-br from-gray-900/50 to-gray-800/30",
+        "hover:shadow-2xl hover:shadow-white/5 transition-all duration-500 ease-out h-full group",
+        "hover:scale-[1.02] hover:-translate-y-1 hover:border-gray-500/50",
+        "backdrop-blur-sm",
+        className
+      )}
     >
+      {/* Image/Video Section with Overlay */}
       <Link
         href={href || "#"}
-        className={cn("block cursor-pointer overflow-hidden", className)}
+        className={cn("block cursor-pointer overflow-hidden relative", className)}
       >
         {video && (
-          <video
-            src={video}
-            autoPlay
-            loop
-            muted
-            playsInline
-            className="pointer-events-none mx-auto h-40 w-full object-cover object-top group-hover:scale-110 transition-transform duration-700"
-          />
+          <div className="relative overflow-hidden aspect-video">
+            <video
+              src={video}
+              autoPlay
+              loop
+              muted
+              playsInline
+              className="pointer-events-none w-full h-full object-contain group-hover:scale-110 transition-transform duration-700"
+            />
+            <div className="absolute inset-0 bg-gradient-to-t from-gray-950/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+          </div>
         )}
         {image && (
-          <Image
-            src={image}
-            alt={title}
-            width={500}
-            height={300}
-            className="h-40 w-full overflow-hidden object-cover object-top group-hover:scale-110 transition-transform duration-700"
-          />
+          <div className="relative overflow-hidden aspect-video">
+            <Image
+              src={image}
+              alt={title}
+              fill
+              sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+              className="overflow-hidden object-contain group-hover:scale-110 transition-transform duration-700"
+            />
+            <div className="absolute inset-0 bg-gradient-to-t from-gray-950/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+          </div>
         )}
+        {/* Hover overlay effect */}
+        <div className="absolute inset-0 bg-white/0 group-hover:bg-white/5 transition-all duration-500 flex items-center justify-center">
+          <div className="opacity-0 group-hover:opacity-100 transform translate-y-4 group-hover:translate-y-0 transition-all duration-500">
+            <div className="bg-white/90 text-gray-900 rounded-full p-2">
+              <ArrowRight className="h-5 w-5" />
+            </div>
+          </div>
+        </div>
       </Link>
-      <CardHeader className="px-4">
-        <div className="space-y-1">
-          <CardTitle className="mt-1 text-base group-hover:text-primary transition-colors duration-500">
-            {title}
-          </CardTitle>
-          <time className="font-sans text-xs">{dates}</time>
-          {active && (
-            <Badge className="ml-4 group-hover:bg-primary group-hover:text-primary-foreground transition-colors duration-500" variant="secondary">
-              Active
-            </Badge>
-          )}
+
+      <CardHeader className="px-5 pt-5 pb-3">
+        <div className="space-y-2">
+          <div className="flex items-start justify-between">
+            <CardTitle className="text-lg font-bold group-hover:text-white transition-colors duration-500 line-clamp-2">
+              {title}
+            </CardTitle>
+            {active && (
+              <Badge 
+                className="ml-2 bg-green-500/20 text-green-300 border-green-500/30 hover:bg-green-500/30 transition-colors duration-300 flex-shrink-0"
+                variant="secondary"
+              >
+                Active
+              </Badge>
+            )}
+          </div>
+          <time className="font-mono text-xs text-gray-400">{dates}</time>
           <div className="hidden font-sans text-xs underline print:visible">
             {link?.replace("https://", "").replace("www.", "").replace("/", "")}
           </div>
-          <Markdown className="prose max-w-full text-pretty font-sans text-xs text-muted-foreground dark:prose-invert group-hover:text-foreground/80 transition-colors duration-500">
+          <Markdown className="prose max-w-full text-pretty font-sans text-sm text-gray-300 dark:prose-invert group-hover:text-gray-200 transition-colors duration-500 line-clamp-3">
             {description}
           </Markdown>
         </div>
       </CardHeader>
-      <CardContent className="mt-auto flex flex-col px-4">
+
+      <CardContent className="mt-auto flex flex-col px-5 py-3">
         {tags && tags.length > 0 && (
-          <div className="mt-2 flex flex-wrap gap-1">
+          <div className="mt-2 flex flex-wrap gap-2">
             {tags?.map((tag) => (
               <Badge
-                className="px-1 py-0 text-[10px] transition-all duration-500 group-hover:bg-primary/20 group-hover:scale-105"
+                className="px-2 py-1 text-xs bg-gray-800/50 text-gray-300 border-gray-600/50 transition-all duration-300 group-hover:bg-gray-700/60 group-hover:scale-105 group-hover:border-gray-400/50"
                 variant="secondary"
                 key={tag}
               >
@@ -109,24 +135,35 @@ export function ProjectCard({
           </div>
         )}
       </CardContent>
-      <CardFooter className="px-4 pb-4">
-        <div className="flex flex-row flex-wrap items-start gap-2">
+
+      <CardFooter className="px-5 pb-5 pt-3">
+        <div className="flex flex-row items-center gap-3">
           {/* GitHub link */}
           {githubUrl && (
-            <Link href={githubUrl} target="_blank">
-              <Badge className="flex gap-2 px-2 py-1 text-[10px] transition-all duration-300 hover:scale-110 hover:bg-primary">
-                <Github className="h-3 w-3" />
-                GitHub
+            <Link 
+              href={githubUrl} 
+              target="_blank"
+              className="group/link"
+            >
+              <Badge className="flex items-center gap-2 px-3 py-1.5 text-xs bg-gray-800/40 text-gray-200 border-gray-600/40 transition-all duration-300 hover:bg-gray-700/60 hover:scale-105 hover:border-gray-400/50">
+                <Github className="h-3.5 w-3.5" />
+                <span>Code</span>
+                <ExternalLink className="h-3 w-3 opacity-0 group-hover/link:opacity-100 transition-opacity duration-300" />
               </Badge>
             </Link>
           )}
           
           {/* Website link */}
           {href && (
-            <Link href={href} target="_blank">
-              <Badge className="flex gap-2 px-2 py-1 text-[10px] transition-all duration-300 hover:scale-110 hover:bg-primary">
-                <ExternalLink className="h-3 w-3" />
-                Website
+            <Link 
+              href={href} 
+              target="_blank"
+              className="group/link"
+            >
+              <Badge className="flex items-center gap-2 px-3 py-1.5 text-xs bg-gray-700/40 text-gray-100 border-gray-500/40 transition-all duration-300 hover:bg-gray-600/60 hover:scale-105 hover:border-gray-300/50">
+                <ExternalLink className="h-3.5 w-3.5" />
+                <span>Live Demo</span>
+                <ArrowRight className="h-3 w-3 opacity-0 group-hover/link:opacity-100 transition-opacity duration-300" />
               </Badge>
             </Link>
           )}

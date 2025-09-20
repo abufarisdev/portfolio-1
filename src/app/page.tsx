@@ -17,31 +17,33 @@ import {
   TabsTrigger,
   TabsContent,
 } from "@/components/ui/tabs";
-import { useEffect } from 'react';
+import { useEffect, useRef } from 'react';
 
 const BLUR_FADE_DELAY = 0.04;
 
 export default function Page() {
+  const lastParticleTimeRef = useRef(0);
+
   useEffect(() => {
     // Create custom cursor element
     const cursor = document.createElement('div');
     cursor.className = 'magic-cursor';
     document.body.appendChild(cursor);
-
+    
     // Create ripple container
     const rippleContainer = document.createElement('div');
     rippleContainer.className = 'ripple-container';
     document.body.appendChild(rippleContainer);
-
+    
     // Hide default cursor
     document.body.style.cursor = 'none';
-
+    
     // Mouse move event
     const onMouseMove = (e: MouseEvent) => {
       cursor.style.left = `${e.clientX}px`;
       cursor.style.top = `${e.clientY}px`;
     };
-
+    
     // Click event for ripples
     const onClick = (e: MouseEvent) => {
       const ripple = document.createElement('div');
@@ -49,37 +51,81 @@ export default function Page() {
       ripple.style.left = `${e.clientX}px`;
       ripple.style.top = `${e.clientY}px`;
       rippleContainer.appendChild(ripple);
-
+      
       // Remove ripple after animation
       setTimeout(() => {
         ripple.remove();
       }, 1000);
     };
-
+    
     // Mouse down/up events for cursor effect
     const onMouseDown = () => {
       cursor.classList.add('active');
     };
-
+    
     const onMouseUp = () => {
       cursor.classList.remove('active');
     };
 
+    // Particle trail effect
+    const createParticle = (e: MouseEvent) => {
+      if (Date.now() - lastParticleTimeRef.current < 30) return; // Limit particle creation
+      
+      const particle = document.createElement('div');
+      particle.className = 'particle-trail';
+      particle.style.left = `${e.clientX}px`;
+      particle.style.top = `${e.clientY}px`;
+      
+      // Randomize particle size and color slightly
+      const size = 2 + Math.random() * 4;
+      const opacity = 0.4 + Math.random() * 0.3;
+      particle.style.width = `${size}px`;
+      particle.style.height = `${size}px`;
+      particle.style.background = `rgba(180, 85, 40, ${opacity})`;
+      
+      document.body.appendChild(particle);
+      
+      // Remove particle after animation
+      setTimeout(() => {
+        if (particle.parentNode) {
+          particle.parentNode.removeChild(particle);
+        }
+      }, 1000);
+      
+      lastParticleTimeRef.current = Date.now();
+    };
+    
     // Add event listeners
     document.addEventListener('mousemove', onMouseMove);
+    document.addEventListener('mousemove', createParticle);
     document.addEventListener('click', onClick);
     document.addEventListener('mousedown', onMouseDown);
     document.addEventListener('mouseup', onMouseUp);
-
+    
     // Cleanup
     return () => {
       document.removeEventListener('mousemove', onMouseMove);
+      document.removeEventListener('mousemove', createParticle);
       document.removeEventListener('click', onClick);
       document.removeEventListener('mousedown', onMouseDown);
       document.removeEventListener('mouseup', onMouseUp);
-      cursor.remove();
-      rippleContainer.remove();
+      
+      if (cursor.parentNode) {
+        cursor.parentNode.removeChild(cursor);
+      }
+      
+      if (rippleContainer.parentNode) {
+        rippleContainer.parentNode.removeChild(rippleContainer);
+      }
+      
       document.body.style.cursor = 'default';
+      
+      // Clean up any remaining particles
+      document.querySelectorAll('.particle-trail').forEach(particle => {
+        if (particle.parentNode) {
+          particle.parentNode.removeChild(particle);
+        }
+      });
     };
   }, []);
 
@@ -179,6 +225,7 @@ export default function Page() {
             </div>
           </BlurFade>
         </section>
+
         {/* Tabs Section */}
         <section id="tabs" className="w-full">
           <BlurFade delay={BLUR_FADE_DELAY}>
@@ -340,169 +387,125 @@ export default function Page() {
         </section>
 
         {/* Skills Section */}
-        <section id="skills" className="mt-16">
-          <div className="flex flex-col gap-y-10">
-            {/* Centered Heading - Changed to white */}
-            <BlurFade delay={BLUR_FADE_DELAY * 9}>
-              <h2 className="text-4xl font-bold text-center text-white">
-                Skills
-              </h2>
-            </BlurFade>
+<section id="skills" className="mt-16">
+  <div className="flex flex-col gap-y-10">
+    {/* Centered Heading - Changed to white */}
+    <BlurFade delay={BLUR_FADE_DELAY * 9}>
+      <h2 className="text-4xl font-bold text-center text-white">
+        Skills
+      </h2>
+    </BlurFade>
 
-            {/* Grid for Skill Categories with Theme-Matching Cards */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-5 w-full">
-              {Object.entries(DATA.skills).map(([category, skills], idx) => (
-                <BlurFade
-                  key={category}
-                  delay={BLUR_FADE_DELAY * 10 + idx * 0.1}
-                  className="w-full"
-                >
-                  {/* Skill Category Card */}
-                  <div className="relative group">
-                    {/* Subtle glow effect */}
-                    <div className="absolute -inset-0.5 bg-gradient-to-r from-blue-700/30 to-purple-700/30 rounded-xl opacity-0 group-hover:opacity-50 transition duration-500 blur-sm"></div>
+    {/* Grid for Skill Categories with Theme-Matching Cards */}
+    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 w-full">
+      {Object.entries(DATA.skills).map(([category, skills], idx) => (
+        <BlurFade
+          key={category}
+          delay={BLUR_FADE_DELAY * 10 + idx * 0.1}
+          className="w-full"
+        >
+          {/* Skill Category Card */}
+          <div className="relative group h-full"> {/* Added h-full for equal height */}
+            {/* Subtle glow effect */}
+            <div className="absolute -inset-0.5 bg-gradient-to-r from-amber-700/30 to-amber-900/30 rounded-xl opacity-0 group-hover:opacity-50 transition duration-500 blur-sm"></div>
 
-                    {/* Main card content */}
-                    <div className="relative bg-card border border-border rounded-xl p-5 h-full transition-all duration-300 hover:border-blue-700/30">
-                      {/* Category Heading - Changed to white */}
-                      <h3 className="text-lg font-semibold mb-4 text-center text-white">
-                        {category}
-                      </h3>
+            {/* Main card content */}
+            <div className="relative bg-card border border-border rounded-xl p-5 h-full transition-all duration-300 hover:border-amber-700/30 group-hover:shadow-lg">
+              {/* Category Heading - Changed to white */}
+              <h3 className="text-lg font-semibold mb-4 text-center text-white">
+                {category}
+              </h3>
 
-                      {/* Skills Badges */}
-                      <div className="flex flex-wrap gap-2 justify-center">
-                        {skills.map((skill) => (
-                          <Badge
-                            key={skill}
-                            variant={category.toLowerCase() as any}
-                            className="hover:scale-105 transition-transform border-0 shadow-md"
-                          >
-                            {skill}
-                          </Badge>
-                        ))}
-                      </div>
-                    </div>
-                  </div>
-                </BlurFade>
-              ))}
+              {/* Skills Badges */}
+              <div className="flex flex-wrap gap-2 justify-center">
+                {skills.map((skill) => (
+                  <Badge
+                    key={skill}
+                    variant={category.toLowerCase() as any}
+                    className="hover:scale-105 transition-transform border-0 shadow-md"
+                  >
+                    {skill}
+                  </Badge>
+                ))}
+              </div>
             </div>
           </div>
-        </section>
+        </BlurFade>
+      ))}
+      
+      {/* New Technology Category Card */}
+      <BlurFade delay={BLUR_FADE_DELAY * 10 + Object.entries(DATA.skills).length * 0.1} className="w-full">
+        <div className="relative group h-full">
+          {/* Subtle glow effect */}
+          <div className="absolute -inset-0.5 bg-gradient-to-r from-amber-700/30 to-amber-900/30 rounded-xl opacity-0 group-hover:opacity-50 transition duration-500 blur-sm"></div>
 
-        {/* Projects Section */}
-        <section id="projects">
-          <div className="space-y-4 w-full">
-            <BlurFade delay={BLUR_FADE_DELAY * 11}>
-              <h2 className="text-3xl font-bold">featured projects</h2>
-            </BlurFade>
-            <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 max-w-[800px] mx-auto">
-              {DATA.projects.map((project, id) => (
-                <BlurFade key={project.title} delay={BLUR_FADE_DELAY * id * 0.05}>
-                  <ProjectCard
-                    href={project.href}
-                    githubUrl={project.githubUrl}
-                    key={project.title}
-                    title={project.title}
-                    active={project.active}
-                    description={project.description}
-                    dates={project.dates}
-                    tags={project.technologies}
-                    image={project.image}
-                    video={project.video}
-                    links={project.links}
-                  />
-                </BlurFade>
-              ))}
+          {/* Main card content */}
+          <div className="relative bg-card border border-border rounded-xl p-5 h-full transition-all duration-300 hover:border-amber-700/30 group-hover:shadow-lg">
+            {/* Category Heading */}
+            <h3 className="text-lg font-semibold mb-4 text-center text-white">
+              DevOps & Cloud
+            </h3>
+
+            {/* Skills Badges */}
+            <div className="flex flex-wrap gap-2 justify-center">
+              <Badge variant="devops" className="hover:scale-105 transition-transform border-0 shadow-md">
+                Docker
+              </Badge>
+
+              <Badge variant="devops" className="hover:scale-105 transition-transform border-0 shadow-md">
+                AWS
+              </Badge>
+              <Badge variant="devops" className="hover:scale-105 transition-transform border-0 shadow-md">
+                GitHub Actions
+              </Badge>
+              <Badge variant="devops" className="hover:scale-105 transition-transform border-0 shadow-md">
+                CI/CD
+              </Badge>
             </div>
           </div>
-        </section>
+        </div>
+      </BlurFade>
+    </div>
+  </div>
+</section>
+
+{/* Projects Section */}
+<section id="projects">
+  <div className="space-y-6 w-full">
+    <BlurFade delay={BLUR_FADE_DELAY * 11}>
+      <h2 className="text-4xl font-bold text-center text-white mb-2">
+        Featured Projects
+      </h2>
+      <p className="text-gray-400 text-center text-lg max-w-2xl mx-auto">
+        Explore my latest work and personal projects
+      </p>
+    </BlurFade>
+    
+    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-6 max-w-6xl mx-auto">
+      {DATA.projects.map((project, id) => (
+        <BlurFade 
+          key={project.title} 
+          delay={BLUR_FADE_DELAY * 12 + id * 0.1}
+          className="h-full"
+        >
+          <ProjectCard
+            href={project.href}
+            githubUrl={project.githubUrl}
+            title={project.title}
+            active={project.active}
+            description={project.description}
+            dates={project.dates}
+            tags={project.technologies}
+            image={project.image}
+            video={project.video}
+            links={project.links}
+          />
+        </BlurFade>
+      ))}
+    </div>
+  </div>
+</section>
       </main>
-
-      {/* Add CSS for waving animation and cursor effects */}
-      <style jsx global>{`
-        .wave-hand {
-          display: inline-block;
-          animation: wave 2.5s infinite;
-          transform-origin: 70% 70%;
-          cursor: pointer;
-        }
-
-        .wave-hand:hover {
-          animation: wave 0.5s infinite;
-        }
-
-        @keyframes wave {
-          0% { transform: rotate(0deg); }
-          10% { transform: rotate(14deg); }
-          20% { transform: rotate(-8deg); }
-          30% { transform: rotate(14deg); }
-          40% { transform: rotate(-4deg); }
-          50% { transform: rotate(10deg); }
-          60% { transform: rotate(0deg); }
-          100% { transform: rotate(0deg); }
-        }
-
-        /* Magic Cursor Styles */
-        .magic-cursor {
-          position: fixed;
-          width: 30px;
-          height: 30px;
-          background: radial-gradient(circle, rgba(91, 133, 255, 0.6) 0%, rgba(91, 133, 255, 0.3) 40%, transparent 70%);
-          border-radius: 50%;
-          pointer-events: none;
-          z-index: 9999;
-          transform: translate(-50%, -50%);
-          filter: blur(4px);
-          transition: 
-            width 0.2s ease,
-            height 0.2s ease,
-            background 0.2s ease;
-        }
-
-        .magic-cursor.active {
-          width: 20px;
-          height: 20px;
-          background: radial-gradient(circle, rgba(147, 197, 253, 0.8) 0%, rgba(147, 197, 253, 0.4) 40%, transparent 70%);
-        }
-
-        /* Ripple Container */
-        .ripple-container {
-          position: fixed;
-          top: 0;
-          left: 0;
-          width: 100%;
-          height: 100%;
-          pointer-events: none;
-          z-index: 9998;
-        }
-
-        /* Ripple Effect */
-        .ripple {
-          position: absolute;
-          width: 100px;
-          height: 100px;
-          background: radial-gradient(circle, rgba(147, 197, 253, 0.3) 0%, transparent 70%);
-          border-radius: 50%;
-          transform: translate(-50%, -50%) scale(0);
-          animation: ripple-effect 1s ease-out;
-        }
-
-        @keyframes ripple-effect {
-          to {
-            transform: translate(-50%, -50%) scale(4);
-            opacity: 0;
-          }
-        }
-
-        /* Interactive element hover states */
-        a:hover ~ .magic-cursor,
-        button:hover ~ .magic-cursor,
-        .badge:hover ~ .magic-cursor {
-          width: 40px;
-          height: 40px;
-          background: radial-gradient(circle, rgba(147, 197, 253, 0.8) 0%, rgba(147, 197, 253, 0.5) 40%, transparent 70%);
-        }
-      `}</style>
     </>
   );
 }
