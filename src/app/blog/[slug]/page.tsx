@@ -64,6 +64,36 @@ export async function generateStaticParams() {
   }));
 }
 
+// Function to get category-specific styles
+const getCategoryStyles = (category: string) => {
+  switch (category) {
+    case "Career":
+      return {
+        bg: "bg-[#5d7e6d]/20",
+        text: "text-[#a3cfbb]",
+        border: "border-[#5d7e6d]/30",
+      };
+    case "Design":
+      return {
+        bg: "bg-[#b46a55]/20",
+        text: "text-[#e8b4a8]",
+        border: "border-[#b46a55]/30",
+      };
+    case "Open Source":
+      return {
+        bg: "bg-[#7d8c69]/20",
+        text: "text-[#c5d0b4]",
+        border: "border-[#7d8c69]/30",
+      };
+    default:
+      return {
+        bg: "bg-[#8a7561]/20",
+        text: "text-[#d6c8b8]",
+        border: "border-[#8a7561]/30",
+      };
+  }
+};
+
 export default function BlogPost({ params }: { params: { slug: string } }) {
   const post = blogPosts.find((post) => post.slug === params.slug);
 
@@ -71,13 +101,15 @@ export default function BlogPost({ params }: { params: { slug: string } }) {
     notFound();
   }
 
+  const categoryStyle = getCategoryStyles(post.category);
+
   return (
     <main className="min-h-screen px-6 py-16 bg-gradient-to-br from-[#1a120b] via-[#2a1c11] to-[#1a120b]">
       <article className="max-w-2xl mx-auto">
         {/* Back button */}
         <Link 
           href="/blog" 
-          className="inline-flex items-center text-sm text-amber-200/70 hover:text-amber-400 mb-6 transition-colors group"
+          className="inline-flex items-center text-sm text-amber-200/70 hover:text-amber-300 mb-6 transition-colors group"
         >
           <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 mr-2 group-hover:-translate-x-1 transition-transform duration-300" viewBox="0 0 20 20" fill="currentColor">
             <path fillRule="evenodd" d="M9.707 16.707a1 1 0 01-1.414 0l-6-6a1 1 0 010-1.414l6-6a1 1 0 011.414 1.414L5.414 9H17a1 1 0 110 2H5.414l4.293 4.293a1 1 0 010 1.414z" clipRule="evenodd" />
@@ -87,60 +119,67 @@ export default function BlogPost({ params }: { params: { slug: string } }) {
 
         {/* Category badge */}
         <div className="mb-5">
-          <span className="inline-flex items-center px-3 py-1 text-xs font-medium rounded-full bg-gradient-to-r from-amber-700/20 to-amber-900/20 text-amber-300 border border-amber-700/40">
+          <span className={`inline-flex items-center px-3 py-1 text-xs font-medium rounded-full ${categoryStyle.bg} ${categoryStyle.text} ${categoryStyle.border}`}>
             {post.category}
           </span>
         </div>
 
-        {/* Title - Simplified styling */}
-        <h1 className="text-3xl md:text-4xl font-bold text-amber-50 mb-5">
+        {/* Title */}
+        <h1 className="text-3xl md:text-4xl font-bold text-amber-50 mb-5 font-serif">
           {post.title}
         </h1>
 
         {/* Meta information */}
         <div className="flex items-center text-amber-200/70 text-xs mb-6">
           <span className="flex items-center mr-5">
-            <svg xmlns="http://www.w3.org2000/svg" className="h-3.5 w-3.5 mr-1.5 text-amber-500/70" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+            <svg xmlns="http://www.w3.org/2000/svg" className="h-3.5 w-3.5 mr-1.5 text-amber-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
             </svg>
             {post.date}
           </span>
           <span className="flex items-center">
-            <svg xmlns="http://www.w3.org/2000/svg" className="h-3.5 w-3.5 mr-1.5 text-amber-500/70" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+            <svg xmlns="http://www.w3.org/2000/svg" className="h-3.5 w-3.5 mr-1.5 text-amber-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
             </svg>
             {post.readTime}
           </span>
         </div>
 
         {/* Featured image */}
-        <div className="rounded-xl overflow-hidden mb-8 border border-amber-800/30 shadow-md">
+        <div className="rounded-xl overflow-hidden mb-8 border border-amber-800/20 shadow-md">
           <div 
-            className="h-60 w-full bg-gradient-to-br from-amber-900/20 to-amber-800/20 relative"
+            className="h-60 w-full bg-gradient-to-br from-amber-900/10 to-amber-800/10 relative"
             style={{
               backgroundImage: `url(${post.thumbnail})`,
               backgroundSize: 'cover',
               backgroundPosition: 'center'
             }}
           >
-            <div className="absolute inset-0 bg-gradient-to-t from-[#1a120b]/40 to-transparent"></div>
+            <div className="absolute inset-0 bg-gradient-to-t from-[#1a120b]/50 to-transparent"></div>
           </div>
         </div>
 
         {/* Content */}
-        <div className="blog-content-simple">
-          <div dangerouslySetInnerHTML={{ __html: post.content }} />
+        <div className="content-container text-amber-100/80">
+          <div 
+            className="text-sm leading-relaxed space-y-4"
+            dangerouslySetInnerHTML={{ 
+              __html: post.content
+                .replace(/<p>/g, '<p class="mb-4">')
+                .replace(/<h2>/g, '<h2 class="text-xl font-semibold text-amber-50 mt-8 mb-4 font-serif">')
+            }}
+          />
         </div>
 
         {/* Divider */}
-        <div className="border-t border-amber-800/30 my-10"></div>
+        <div className="border-t border-amber-800/20 my-10"></div>
 
         {/* Call to action */}
         <div className="text-center">
-          <p className="text-amber-200/70 mb-5 text-base">Enjoyed this article?</p>
+          <p className="text-amber-200/70 mb-5 text-sm">Enjoyed this article?</p>
           <Link
             href="/blog"
-            className="inline-flex items-center px-5 py-2.5 rounded-full bg-gradient-to-r from-amber-700 to-amber-900 text-amber-50 font-medium hover:shadow-md transform hover:-translate-y-0.5 transition-all duration-300 group text-sm"
+            className="inline-flex items-center px-4 py-2 rounded-lg bg-amber-800/30 text-amber-200 font-medium hover:bg-amber-800/40 transition-all duration-300 border border-amber-700/30 text-sm group"
           >
             Read more articles
             <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 ml-1.5 group-hover:translate-x-1 transition-transform duration-300" viewBox="0 0 20 20" fill="currentColor">
@@ -150,14 +189,14 @@ export default function BlogPost({ params }: { params: { slug: string } }) {
         </div>
 
         {/* Author bio section */}
-        <div className="mt-12 p-5 bg-amber-950/30 rounded-xl border border-amber-800/20">
+        <div className="mt-12 p-5 bg-amber-950/20 rounded-xl border border-amber-800/20">
           <div className="flex items-center">
-            <div className="h-12 w-12 rounded-full bg-gradient-to-br from-amber-700 to-amber-900 flex items-center justify-center text-amber-100 font-bold text-sm mr-3">
+            <div className="h-10 w-10 rounded-full bg-gradient-to-br from-amber-700 to-amber-800 flex items-center justify-center text-amber-100 font-bold text-xs mr-3">
               A
             </div>
             <div>
-              <h3 className="text-base font-semibold text-amber-100">About the Author</h3>
-              <p className="text-amber-200/70 mt-0.5 text-sm">Passionate developer sharing experiences and learnings from the tech journey.</p>
+              <h3 className="text-sm font-semibold text-amber-100">About the Author</h3>
+              <p className="text-amber-200/70 mt-0.5 text-xs">Passionate developer sharing experiences and learnings from the tech journey.</p>
             </div>
           </div>
         </div>

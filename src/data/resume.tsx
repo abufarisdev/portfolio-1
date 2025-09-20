@@ -101,7 +101,7 @@ skills: {
 
   projects: [
     {
-      title: "Crypton - Real Time Crypto Tracker",
+      title: "Crypton",
       href: "https://crypton-wheat.vercel.app/",
       githubUrl : "https://github.com/abufarisdev/crypton.git",
       dates: "September'25",

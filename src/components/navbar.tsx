@@ -19,7 +19,7 @@ export function Navbar() {
     <header
       className={cn(
         "fixed top-0 left-0 right-0 z-50 transition-colors duration-300",
-        scrolled ? "bg-background/70 backdrop-blur-md shadow-sm" : "bg-transparent"
+        scrolled ? "bg-background/40 backdrop-blur-md shadow-sm" : "bg-transparent"
       )}
     >
       <div className="max-w-2xl mx-auto px-6">

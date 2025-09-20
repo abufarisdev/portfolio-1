@@ -137,15 +137,15 @@ export default function Page() {
       </div>
 
       {/* Floating Chatbot */}
-      <div className="fixed bottom-4 right-4 z-50">
+      <div className="fixed bottom-4 right-4 z-50 space-y-4">
         <AboutMeBot />
       </div>
 
       {/* Main page content */}
-      <main className="flex flex-col min-h-[100dvh] space-y-8">
+      <main className="flex flex-col min-h-[100dvh] space-y-6"> 
         {/* Hero Section */}
         <section id="hero">
-          <div className="mx-auto w-full max-w-2xl space-y-6">
+          <div className="mx-auto w-full max-w-2xl space-y-16">
             <div className="gap-2 flex justify-between items-center">
               <div className="flex-col flex flex-1 space-y-1.5">
                 {/* Name with waving hand */}
@@ -157,7 +157,7 @@ export default function Page() {
                 </BlurFade>
 
                 <BlurFadeText
-                  className="max-w-[600px] md:text-md"
+                  className="max-w-[600px] md:text-md gap-y-8 text-zinc-300"
                   delay={BLUR_FADE_DELAY}
                   text={DATA.description}
                 />
@@ -227,7 +227,7 @@ export default function Page() {
         </section>
 
         {/* Tabs Section */}
-        <section id="tabs" className="w-full">
+        <section id="tabs" className="w-full"> {/* Added mt-12 */}
           <BlurFade delay={BLUR_FADE_DELAY}>
             <Tabs defaultValue="education" className="w-full">
               <TabsList className="flex justify-center mb-8">
@@ -387,124 +387,123 @@ export default function Page() {
         </section>
 
         {/* Skills Section */}
-<section id="skills" className="mt-16">
-  <div className="flex flex-col gap-y-10">
-    {/* Centered Heading - Changed to white */}
-    <BlurFade delay={BLUR_FADE_DELAY * 9}>
-      <h2 className="text-4xl font-bold text-center text-white">
-        Skills
-      </h2>
-    </BlurFade>
+        <section id="skills" className="mt-20"> {/* Increased from mt-16 to mt-20 */}
+          <div className="flex flex-col gap-y-12"> {/* Increased from gap-y-10 to gap-y-12 */}
+            {/* Centered Heading */}
+            <BlurFade delay={BLUR_FADE_DELAY * 9}>
+              <h2 className="text-4xl font-bold text-center text-zinc-200">
+                Skills
+              </h2>
+            </BlurFade>
 
-    {/* Grid for Skill Categories with Theme-Matching Cards */}
-    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 w-full">
-      {Object.entries(DATA.skills).map(([category, skills], idx) => (
-        <BlurFade
-          key={category}
-          delay={BLUR_FADE_DELAY * 10 + idx * 0.1}
-          className="w-full"
-        >
-          {/* Skill Category Card */}
-          <div className="relative group h-full"> {/* Added h-full for equal height */}
-            {/* Subtle glow effect */}
-            <div className="absolute -inset-0.5 bg-gradient-to-r from-amber-700/30 to-amber-900/30 rounded-xl opacity-0 group-hover:opacity-50 transition duration-500 blur-sm"></div>
+            {/* Grid for Skill Categories */}
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 w-full "> {/* Increased gap from gap-5 to gap-6 */}
+              {Object.entries(DATA.skills).map(([category, skills], idx) => (
+                <BlurFade
+                  key={category}
+                  delay={BLUR_FADE_DELAY * 10 + idx * 0.1}
+                  className="w-full"
+                >
+                  {/* Skill Category Card */}
+                  <div className="relative group h-full">
+                    {/* Subtle glow effect */}
+                    <div className="absolute -inset-0.5 bg-gradient-to-r from-amber-700/30 to-amber-900/30 rounded-xl opacity-0 group-hover:opacity-50 transition duration-500 blur-sm"></div>
 
-            {/* Main card content */}
-            <div className="relative bg-card border border-border rounded-xl p-5 h-full transition-all duration-300 hover:border-amber-700/30 group-hover:shadow-lg">
-              {/* Category Heading - Changed to white */}
-              <h3 className="text-lg font-semibold mb-4 text-center text-white">
-                {category}
-              </h3>
+                    {/* Main card content */}
+                    <div className="relative bg-card border border-border rounded-xl p-6 h-full transition-all duration-300 hover:border-amber-700/30 group-hover:shadow-lg"> {/* Increased padding from p-5 to p-6 */}
+                      {/* Category Heading */}
+                      <h3 className="text-lg font-semibold mb-5 text-center text-zinc-400"> {/* Increased margin from mb-4 to mb-5 */}
+                        {category}
+                      </h3>
 
-              {/* Skills Badges */}
-              <div className="flex flex-wrap gap-2 justify-center">
-                {skills.map((skill) => (
-                  <Badge
-                    key={skill}
-                    variant={category.toLowerCase() as any}
-                    className="hover:scale-105 transition-transform border-0 shadow-md"
-                  >
-                    {skill}
-                  </Badge>
-                ))}
-              </div>
+                      {/* Skills Badges */}
+                      <div className="flex flex-wrap gap-3 justify-center"> {/* Increased gap from gap-2 to gap-3 */}
+                        {skills.map((skill) => (
+                          <Badge
+                            key={skill}
+                            variant={category.toLowerCase() as any}
+                            className="hover:scale-105 transition-transform border-0 shadow-md"
+                          >
+                            {skill}
+                          </Badge>
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+                </BlurFade>
+              ))}
+              
+              {/* DevOps & Cloud Category Card */}
+              <BlurFade delay={BLUR_FADE_DELAY * 10 + Object.entries(DATA.skills).length * 0.1} className="w-full">
+                <div className="relative group h-full">
+                  {/* Subtle glow effect */}
+                  <div className="absolute -inset-0.5 bg-gradient-to-r from-amber-700/30 to-amber-900/30 rounded-xl opacity-0 group-hover:opacity-50 transition duration-500 blur-sm"></div>
+
+                  {/* Main card content */}
+                  <div className="relative bg-card border border-border rounded-xl p-6 h-full transition-all duration-300 hover:border-amber-700/30 group-hover:shadow-lg"> {/* Increased padding from p-5 to p-6 */}
+                    {/* Category Heading */}
+                    <h3 className="text-lg font-semibold mb-5 text-center  text-zinc-400"> {/* Increased margin from mb-4 to mb-5 */}
+                      DevOps & Cloud
+                    </h3>
+
+                    {/* Skills Badges */}
+                    <div className="flex flex-wrap gap-3 justify-center"> {/* Increased gap from gap-2 to gap-3 */}
+                      <Badge variant="devops" className="hover:scale-105 transition-transform border-0 shadow-md">
+                        Docker
+                      </Badge>
+                      <Badge variant="devops" className="hover:scale-105 transition-transform border-0 shadow-md">
+                        AWS
+                      </Badge>
+                      <Badge variant="devops" className="hover:scale-105 transition-transform border-0 shadow-md">
+                        GitHub Actions
+                      </Badge>
+                      <Badge variant="devops" className="hover:scale-105 transition-transform border-0 shadow-md">
+                        CI/CD
+                      </Badge>
+                    </div>
+                  </div>
+                </div>
+              </BlurFade>
             </div>
           </div>
-        </BlurFade>
-      ))}
-      
-      {/* New Technology Category Card */}
-      <BlurFade delay={BLUR_FADE_DELAY * 10 + Object.entries(DATA.skills).length * 0.1} className="w-full">
-        <div className="relative group h-full">
-          {/* Subtle glow effect */}
-          <div className="absolute -inset-0.5 bg-gradient-to-r from-amber-700/30 to-amber-900/30 rounded-xl opacity-0 group-hover:opacity-50 transition duration-500 blur-sm"></div>
+        </section>
 
-          {/* Main card content */}
-          <div className="relative bg-card border border-border rounded-xl p-5 h-full transition-all duration-300 hover:border-amber-700/30 group-hover:shadow-lg">
-            {/* Category Heading */}
-            <h3 className="text-lg font-semibold mb-4 text-center text-white">
-              DevOps & Cloud
-            </h3>
-
-            {/* Skills Badges */}
-            <div className="flex flex-wrap gap-2 justify-center">
-              <Badge variant="devops" className="hover:scale-105 transition-transform border-0 shadow-md">
-                Docker
-              </Badge>
-
-              <Badge variant="devops" className="hover:scale-105 transition-transform border-0 shadow-md">
-                AWS
-              </Badge>
-              <Badge variant="devops" className="hover:scale-105 transition-transform border-0 shadow-md">
-                GitHub Actions
-              </Badge>
-              <Badge variant="devops" className="hover:scale-105 transition-transform border-0 shadow-md">
-                CI/CD
-              </Badge>
+        {/* Projects Section */}
+        <section id="projects" className="mt-20"> {/* Added mt-20 */}
+          <div className="space-y-8 w-full"> {/* Increased from space-y-6 to space-y-8 */}
+            <BlurFade delay={BLUR_FADE_DELAY * 11}>
+              <h2 className="text-4xl font-bold text-center text-zinc-200 mb-4"> {/* Increased margin from mb-2 to mb-4 */}
+                Featured Projects
+              </h2>
+              <p className="text-gray-400 text-center text-lg max-w-2xl mx-auto">
+                Explore my latest work and personal projects
+              </p>
+            </BlurFade>
+            
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-8 max-w-6xl mx-auto"> {/* Increased gap from gap-6 to gap-8 */}
+              {DATA.projects.map((project, id) => (
+                <BlurFade 
+                  key={project.title} 
+                  delay={BLUR_FADE_DELAY * 12 + id * 0.1}
+                  className="h-full"
+                >
+                  <ProjectCard
+                    href={project.href}
+                    githubUrl={project.githubUrl}
+                    title={project.title}
+                    active={project.active}
+                    description={project.description}
+                    dates={project.dates}
+                    tags={project.technologies}
+                    image={project.image}
+                    video={project.video}
+                    links={project.links}
+                  />
+                </BlurFade>
+              ))}
             </div>
           </div>
-        </div>
-      </BlurFade>
-    </div>
-  </div>
-</section>
-
-{/* Projects Section */}
-<section id="projects">
-  <div className="space-y-6 w-full">
-    <BlurFade delay={BLUR_FADE_DELAY * 11}>
-      <h2 className="text-4xl font-bold text-center text-white mb-2">
-        Featured Projects
-      </h2>
-      <p className="text-gray-400 text-center text-lg max-w-2xl mx-auto">
-        Explore my latest work and personal projects
-      </p>
-    </BlurFade>
-    
-    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-6 max-w-6xl mx-auto">
-      {DATA.projects.map((project, id) => (
-        <BlurFade 
-          key={project.title} 
-          delay={BLUR_FADE_DELAY * 12 + id * 0.1}
-          className="h-full"
-        >
-          <ProjectCard
-            href={project.href}
-            githubUrl={project.githubUrl}
-            title={project.title}
-            active={project.active}
-            description={project.description}
-            dates={project.dates}
-            tags={project.technologies}
-            image={project.image}
-            video={project.video}
-            links={project.links}
-          />
-        </BlurFade>
-      ))}
-    </div>
-  </div>
-</section>
+        </section>
       </main>
     </>
   );
