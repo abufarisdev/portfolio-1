@@ -27,21 +27,21 @@ export default function Page() {
     const cursor = document.createElement('div');
     cursor.className = 'magic-cursor';
     document.body.appendChild(cursor);
-    
+
     // Create ripple container
     const rippleContainer = document.createElement('div');
     rippleContainer.className = 'ripple-container';
     document.body.appendChild(rippleContainer);
-    
+
     // Hide default cursor
     document.body.style.cursor = 'none';
-    
+
     // Mouse move event
     const onMouseMove = (e: MouseEvent) => {
       cursor.style.left = `${e.clientX}px`;
       cursor.style.top = `${e.clientY}px`;
     };
-    
+
     // Click event for ripples
     const onClick = (e: MouseEvent) => {
       const ripple = document.createElement('div');
@@ -49,28 +49,28 @@ export default function Page() {
       ripple.style.left = `${e.clientX}px`;
       ripple.style.top = `${e.clientY}px`;
       rippleContainer.appendChild(ripple);
-      
+
       // Remove ripple after animation
       setTimeout(() => {
         ripple.remove();
       }, 1000);
     };
-    
+
     // Mouse down/up events for cursor effect
     const onMouseDown = () => {
       cursor.classList.add('active');
     };
-    
+
     const onMouseUp = () => {
       cursor.classList.remove('active');
     };
-    
+
     // Add event listeners
     document.addEventListener('mousemove', onMouseMove);
     document.addEventListener('click', onClick);
     document.addEventListener('mousedown', onMouseDown);
     document.addEventListener('mouseup', onMouseUp);
-    
+
     // Cleanup
     return () => {
       document.removeEventListener('mousemove', onMouseMove);
@@ -179,51 +179,160 @@ export default function Page() {
             </div>
           </BlurFade>
         </section>
-
         {/* Tabs Section */}
         <section id="tabs" className="w-full">
           <BlurFade delay={BLUR_FADE_DELAY}>
             <Tabs defaultValue="education" className="w-full">
-              <TabsList className="flex justify-center mb-6">
+              <TabsList className="flex justify-center mb-8">
                 <TabsTrigger value="education">Education</TabsTrigger>
                 <TabsTrigger value="experience">Experience</TabsTrigger>
               </TabsList>
 
               {/* Experience */}
               <TabsContent value="experience" className="w-full">
-                <div className="space-y-4 w-full">
-                  {DATA.work.map((work) => (
-                    <ResumeCard
-                      key={work.company}
-                      logoUrl={work.logoUrl}
-                      altText={work.company}
-                      title={work.company}
-                      subtitle={work.title}
-                      href={work.href}
-                      badges={work.badges}
-                      period={`${work.start} - ${work.end ?? "Present"}`}
-                      description={work.description}
-                    />
-                  ))}
+                <div className="w-full">
+                  <BlurFade delay={BLUR_FADE_DELAY}>
+                    {/* Single experience card container */}
+                    <div className="bg-card border border-border rounded-xl p-6 transition-all duration-300 hover:shadow-lg">
+                      {/* Timeline style layout */}
+                      <div className="space-y-8">
+                        {DATA.work.map((work) => (
+                          <div key={work.company} className="relative">
+                            <div className="flex items-start gap-4">
+                              {/* Company logo/icon */}
+                              <div className="flex-shrink-0">
+                                <div className="h-12 w-12 rounded-full bg-primary/10 flex items-center justify-center">
+                                  <img
+                                    src={work.logoUrl}
+                                    alt={work.company}
+                                    className="h-8 w-8 object-contain"
+                                  />
+                                </div>
+                              </div>
+
+                              {/* Experience details */}
+                              <div className="flex-1 min-w-0">
+                                <div className="flex flex-col sm:flex-row sm:justify-between sm:items-start gap-2 mb-3">
+                                  <div className="min-w-0">
+                                    <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-3">
+                                      <h4 className="text-lg font-semibold text-foreground">
+                                        {work.company}
+                                      </h4>
+                                      {/* Badges beside heading */}
+                                      {work.badges && work.badges.length > 0 && (
+                                        <div className="flex flex-wrap gap-2">
+                                          {work.badges.map((badge) => (
+                                            <span
+                                              key={badge}
+                                              className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-primary/10 text-primary"
+                                            >
+                                              {badge}
+                                            </span>
+                                          ))}
+                                        </div>
+                                      )}
+                                    </div>
+                                    <p className="text-muted-foreground text-sm mt-1">
+                                      {work.title}
+                                    </p>
+                                  </div>
+                                  <p className="text-muted-foreground text-sm whitespace-nowrap sm:text-right flex-shrink-0">
+                                    {work.start} - {work.end ?? "Present"}
+                                  </p>
+                                </div>
+
+                                {/* Description as bullet points */}
+                                {work.description && (
+                                  <ul className="text-foreground/60 text-xs mt-3 space-y-1">
+                                    {work.description.split('. ').filter(point => point.trim().length > 0).map((point, i) => (
+                                      <li key={i} className="flex items-start">
+                                        <span className="mr-2">•</span>
+                                        <span>{point.replace(/\.$/, '')}</span>
+                                      </li>
+                                    ))}
+                                  </ul>
+                                )}
+                              </div>
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  </BlurFade>
                 </div>
               </TabsContent>
 
               {/* Education */}
               <TabsContent value="education" className="w-full">
-                <div className="space-y-4 w-full">
-                  {DATA.education.map((edu) => (
-                    <ResumeCard
-                      key={edu.school}
-                      logoUrl={edu.logoUrl}
-                      altText={edu.school}
-                      title={edu.school}
-                      subtitle={edu.degree}
-                      href={edu.href}
-                      badges={edu.badges}
-                      period={`${edu.start} - ${edu.end ?? "Present"}`}
-                      description={edu.description}
-                    />
-                  ))}
+                <div className="w-full">
+                  <BlurFade delay={BLUR_FADE_DELAY}>
+                    {/* Single education card container */}
+                    <div className="bg-card border border-border rounded-xl p-6 transition-all duration-300 hover:shadow-lg">
+                      {/* Timeline style layout */}
+                      <div className="space-y-8">
+                        {DATA.education.map((edu) => (
+                          <div key={edu.school} className="relative">
+                            <div className="flex items-start gap-4">
+                              {/* School logo/icon */}
+                              <div className="flex-shrink-0">
+                                <div className="h-12 w-12 rounded-full bg-primary/10 flex items-center justify-center">
+                                  <img
+                                    src={edu.logoUrl}
+                                    alt={edu.school}
+                                    className="h-8 w-8 object-contain"
+                                  />
+                                </div>
+                              </div>
+
+                              {/* Education details */}
+                              <div className="flex-1 min-w-0">
+                                <div className="flex flex-col sm:flex-row sm:justify-between sm:items-start gap-2 mb-3">
+                                  <div className="min-w-0">
+                                    <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-3">
+                                      <h4 className="text-lg font-semibold text-foreground">
+                                        {edu.school}
+                                      </h4>
+                                      {/* Badges beside heading */}
+                                      {edu.badges && edu.badges.length > 0 && (
+                                        <div className="flex flex-wrap gap-2">
+                                          {edu.badges.map((badge) => (
+                                            <span
+                                              key={badge}
+                                              className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-primary/10 text-primary"
+                                            >
+                                              {badge}
+                                            </span>
+                                          ))}
+                                        </div>
+                                      )}
+                                    </div>
+                                    <p className="text-muted-foreground text-sm mt-1">
+                                      {edu.degree}
+                                    </p>
+                                  </div>
+                                  <p className="text-muted-foreground text-sm whitespace-nowrap sm:text-right flex-shrink-0">
+                                    {edu.start} - {edu.end ?? "Present"}
+                                  </p>
+                                </div>
+
+                                {/* Description as bullet points */}
+                                {edu.description && (
+                                  <ul className="text-foreground/60 text-xs mt-3 space-y-1">
+                                    {edu.description.split('. ').filter(point => point.trim().length > 0).map((point, i) => (
+                                      <li key={i} className="flex items-start">
+                                        <span className="mr-2">•</span>
+                                        <span>{point.replace(/\.$/, '')}</span>
+                                      </li>
+                                    ))}
+                                  </ul>
+                                )}
+                              </div>
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  </BlurFade>
                 </div>
               </TabsContent>
             </Tabs>
@@ -233,9 +342,9 @@ export default function Page() {
         {/* Skills Section */}
         <section id="skills" className="mt-16">
           <div className="flex flex-col gap-y-10">
-            {/* Centered Heading */}
+            {/* Centered Heading - Changed to white */}
             <BlurFade delay={BLUR_FADE_DELAY * 9}>
-              <h2 className="text-4xl font-bold text-center bg-gradient-to-r from-gray-200 to-gray-400 bg-clip-text text-transparent">
+              <h2 className="text-4xl font-bold text-center text-white">
                 Skills
               </h2>
             </BlurFade>
@@ -252,11 +361,11 @@ export default function Page() {
                   <div className="relative group">
                     {/* Subtle glow effect */}
                     <div className="absolute -inset-0.5 bg-gradient-to-r from-blue-700/30 to-purple-700/30 rounded-xl opacity-0 group-hover:opacity-50 transition duration-500 blur-sm"></div>
-                    
+
                     {/* Main card content */}
                     <div className="relative bg-card border border-border rounded-xl p-5 h-full transition-all duration-300 hover:border-blue-700/30">
-                      {/* Category Heading */}
-                      <h3 className="text-lg font-semibold mb-4 text-center text-foreground">
+                      {/* Category Heading - Changed to white */}
+                      <h3 className="text-lg font-semibold mb-4 text-center text-white">
                         {category}
                       </h3>
 
