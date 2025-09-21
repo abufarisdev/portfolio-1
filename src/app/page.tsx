@@ -1,9 +1,9 @@
 "use client";
 
+import { useState, useEffect } from "react";
 import BlurFade from "@/components/magicui/blur-fade";
 import BlurFadeText from "@/components/magicui/blur-fade-text";
 import { ProjectCard } from "@/components/project-card";
-import { ResumeCard } from "@/components/resume-card";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { DATA } from "@/data/resume";
@@ -17,118 +17,119 @@ import {
   TabsTrigger,
   TabsContent,
 } from "@/components/ui/tabs";
-import { useEffect, useRef } from 'react';
+import { ChevronLeft, ChevronRight } from "lucide-react";
 
 const BLUR_FADE_DELAY = 0.04;
 
-export default function Page() {
-  const lastParticleTimeRef = useRef(0);
-
+// macOS-style carousel component
+function ProjectCarousel({ projects }: { projects: typeof DATA.projects }) {
+  const [currentIndex, setCurrentIndex] = useState(0);
+  
+  // Handle navigation
+  const nextProject = () => {
+    setCurrentIndex((prevIndex) => (prevIndex + 1) % projects.length);
+  };
+  
+  const prevProject = () => {
+    setCurrentIndex((prevIndex) => (prevIndex - 1 + projects.length) % projects.length);
+  };
+  
+  // Calculate the projects to display (current, previous, next)
+  const getVisibleProjects = () => {
+    const prevIndex = (currentIndex - 1 + projects.length) % projects.length;
+    const nextIndex = (currentIndex + 1) % projects.length;
+    
+    return [
+      projects[prevIndex],
+      projects[currentIndex],
+      projects[nextIndex]
+    ];
+  };
+  
+  // Auto-rotate projects every 5 seconds
   useEffect(() => {
-    // Create custom cursor element
-    const cursor = document.createElement('div');
-    cursor.className = 'magic-cursor';
-    document.body.appendChild(cursor);
+    const interval = setInterval(() => {
+      nextProject();
+    }, 5000);
     
-    // Create ripple container
-    const rippleContainer = document.createElement('div');
-    rippleContainer.className = 'ripple-container';
-    document.body.appendChild(rippleContainer);
-    
-    // Hide default cursor
-    document.body.style.cursor = 'none';
-    
-    // Mouse move event
-    const onMouseMove = (e: MouseEvent) => {
-      cursor.style.left = `${e.clientX}px`;
-      cursor.style.top = `${e.clientY}px`;
-    };
-    
-    // Click event for ripples
-    const onClick = (e: MouseEvent) => {
-      const ripple = document.createElement('div');
-      ripple.className = 'ripple';
-      ripple.style.left = `${e.clientX}px`;
-      ripple.style.top = `${e.clientY}px`;
-      rippleContainer.appendChild(ripple);
-      
-      // Remove ripple after animation
-      setTimeout(() => {
-        ripple.remove();
-      }, 1000);
-    };
-    
-    // Mouse down/up events for cursor effect
-    const onMouseDown = () => {
-      cursor.classList.add('active');
-    };
-    
-    const onMouseUp = () => {
-      cursor.classList.remove('active');
-    };
+    return () => clearInterval(interval);
+  }, [currentIndex]);
 
-    // Particle trail effect
-    const createParticle = (e: MouseEvent) => {
-      if (Date.now() - lastParticleTimeRef.current < 30) return; // Limit particle creation
-      
-      const particle = document.createElement('div');
-      particle.className = 'particle-trail';
-      particle.style.left = `${e.clientX}px`;
-      particle.style.top = `${e.clientY}px`;
-      
-      // Randomize particle size and color slightly
-      const size = 2 + Math.random() * 4;
-      const opacity = 0.4 + Math.random() * 0.3;
-      particle.style.width = `${size}px`;
-      particle.style.height = `${size}px`;
-      particle.style.background = `rgba(180, 85, 40, ${opacity})`;
-      
-      document.body.appendChild(particle);
-      
-      // Remove particle after animation
-      setTimeout(() => {
-        if (particle.parentNode) {
-          particle.parentNode.removeChild(particle);
-        }
-      }, 1000);
-      
-      lastParticleTimeRef.current = Date.now();
-    };
-    
-    // Add event listeners
-    document.addEventListener('mousemove', onMouseMove);
-    document.addEventListener('mousemove', createParticle);
-    document.addEventListener('click', onClick);
-    document.addEventListener('mousedown', onMouseDown);
-    document.addEventListener('mouseup', onMouseUp);
-    
-    // Cleanup
-    return () => {
-      document.removeEventListener('mousemove', onMouseMove);
-      document.removeEventListener('mousemove', createParticle);
-      document.removeEventListener('click', onClick);
-      document.removeEventListener('mousedown', onMouseDown);
-      document.removeEventListener('mouseup', onMouseUp);
-      
-      if (cursor.parentNode) {
-        cursor.parentNode.removeChild(cursor);
-      }
-      
-      if (rippleContainer.parentNode) {
-        rippleContainer.parentNode.removeChild(rippleContainer);
-      }
-      
-      document.body.style.cursor = 'default';
-      
-      // Clean up any remaining particles
-      document.querySelectorAll('.particle-trail').forEach(particle => {
-        if (particle.parentNode) {
-          particle.parentNode.removeChild(particle);
-        }
-      });
-    };
-  }, []);
+  const visibleProjects = getVisibleProjects();
 
+  return (
+    <BlurFade delay={BLUR_FADE_DELAY*11}>
+   
+    <div className="w-full max-w-6xl mx-auto">
+      <div className="relative flex items-center justify-center h-[500px]">
+        {/* Navigation buttons */}
+        <button 
+          onClick={prevProject}
+          className="absolute left-4 z-10 p-3 rounded-full bg-background/80 backdrop-blur-sm border border-border hover:bg-accent transition-colors"
+          aria-label="Previous project"
+        >
+          <ChevronLeft className="h-6 w-6" />
+        </button>
+        
+        <button 
+          onClick={nextProject}
+          className="absolute right-4 z-10 p-3 rounded-full bg-background/80 backdrop-blur-sm border border-border hover:bg-accent transition-colors"
+          aria-label="Next project"
+        >
+          <ChevronRight className="h-6 w-6" />
+        </button>
+
+        {/* Project cards */}
+        <div className="flex items-center justify-center w-full h-full">
+          {/* Left card (previous project) */}
+          <div className="absolute left-0 transform -translate-x-1/4 scale-90 opacity-70 transition-all duration-500 z-20 w-80">
+            <ProjectCard
+              {...visibleProjects[0]}
+              tags={visibleProjects[0].technologies}
+              className="pointer-events-none"
+            />
+          </div>
+
+          {/* Center card (current project) */}
+          <div className="relative z-30 scale-105 transition-all duration-500 w-96">
+            <ProjectCard
+              {...visibleProjects[1]}
+              tags={visibleProjects[1].technologies}
+            />
+          </div>
+
+          {/* Right card (next project) */}
+          <div className="absolute right-0 transform translate-x-1/4 scale-90 opacity-70 transition-all duration-500 z-20 w-80">
+            <ProjectCard
+              {...visibleProjects[2]}
+              tags={visibleProjects[2].technologies}
+              className="pointer-events-none"
+            />
+          </div>
+        </div>
+      </div>
+
+      {/* Dots indicator */}
+      <div className="flex justify-center mt-8 space-x-2">
+        {projects.map((_, index) => (
+          <button
+            key={index}
+            onClick={() => setCurrentIndex(index)}
+            className={`w-3 h-3 rounded-full transition-all duration-300 ${
+              index === currentIndex 
+                ? "bg-primary scale-125" 
+                : "bg-muted-foreground/30 hover:bg-muted-foreground/50"
+            }`}
+            aria-label={`Go to project ${index + 1}`}
+          />
+        ))}
+      </div>
+    </div>
+    </BlurFade>
+  );
+}
+
+export default function Page() {
   return (
     <>
       {/* Floating Light/Dark Toggle */}
@@ -137,27 +138,27 @@ export default function Page() {
       </div>
 
       {/* Floating Chatbot */}
-      <div className="fixed bottom-4 right-4 z-50 space-y-4">
+      <div className="fixed bottom-4 right-4 z-50">
         <AboutMeBot />
       </div>
 
       {/* Main page content */}
-      <main className="flex flex-col min-h-[100dvh] space-y-6"> 
+      <main className="flex flex-col min-h-[100dvh] space-y-6">
         {/* Hero Section */}
         <section id="hero">
-          <div className="mx-auto w-full max-w-2xl space-y-16">
+          <div className="mx-auto w-full max-w-2xl space-y-4">
             <div className="gap-2 flex justify-between items-center">
               <div className="flex-col flex flex-1 space-y-1.5">
                 {/* Name with waving hand */}
                 <BlurFade delay={BLUR_FADE_DELAY}>
-                  <h1 className="text-4xl font-bold tracking-tighter sm:text-5xl xl:text-6xl/none flex items-center">
+                  <h1 className="text-4xl font-bold tracking-tighter sm:text-5xl xl/text-6xl/none flex items-center">
                     {DATA.name.replace("👋", "")}
                     <span className="wave-hand ml-2 text-4xl">👋</span>
                   </h1>
                 </BlurFade>
 
                 <BlurFadeText
-                  className="max-w-[600px] md:text-md gap-y-8 text-zinc-300"
+                  className="max-w-[600px] md:text-md text-zinc-300"
                   delay={BLUR_FADE_DELAY}
                   text={DATA.description}
                 />
@@ -202,7 +203,6 @@ export default function Page() {
                   <AvatarFallback>{DATA.initials}</AvatarFallback>
                 </Avatar>
               </BlurFade>
-
             </div>
           </div>
         </section>
@@ -219,7 +219,7 @@ export default function Page() {
                   rel="noreferrer"
                   className="flex gap-1 justify-center items-center p-3 rounded-md bg-muted/50 hover:bg-muted transition-all duration-300 hover:shadow-lg hover:shadow-primary/20"
                 >
-                  <social.icon className="size-5" />
+                  <social.icon className="size-4" />
                 </a>
               ))}
             </div>
@@ -227,7 +227,7 @@ export default function Page() {
         </section>
 
         {/* Tabs Section */}
-        <section id="tabs" className="w-full"> {/* Added mt-12 */}
+        <section id="tabs" className="w-full">
           <BlurFade delay={BLUR_FADE_DELAY}>
             <Tabs defaultValue="education" className="w-full">
               <TabsList className="flex justify-center mb-8">
@@ -385,10 +385,12 @@ export default function Page() {
             </Tabs>
           </BlurFade>
         </section>
+<br></br>
+<br></br>
 
-        {/* Skills Section */}
-        <section id="skills" className="mt-20"> {/* Increased from mt-16 to mt-20 */}
-          <div className="flex flex-col gap-y-12"> {/* Increased from gap-y-10 to gap-y-12 */}
+          {/* Skills Section */}
+        <section id="skills" className="mt-20"> 
+          <div className="flex flex-col gap-y-8"> {/* Increased from gap-y-10 to gap-y-12 */}
             {/* Centered Heading */}
             <BlurFade delay={BLUR_FADE_DELAY * 9}>
               <h2 className="text-4xl font-bold text-center text-zinc-200">
@@ -467,41 +469,24 @@ export default function Page() {
             </div>
           </div>
         </section>
+        
 
-        {/* Projects Section */}
-        <section id="projects" className="mt-20"> {/* Added mt-20 */}
-          <div className="space-y-8 w-full"> {/* Increased from space-y-6 to space-y-8 */}
+        <br></br>
+        <br></br>
+        <br></br>
+        {/* Projects Section with macOS-style Carousel */}
+        <section id="projects" className="mt-20">
+          <div className="space-y-10 w-full">
             <BlurFade delay={BLUR_FADE_DELAY * 11}>
-              <h2 className="text-4xl font-bold text-center text-zinc-200 mb-4"> {/* Increased margin from mb-2 to mb-4 */}
+              <h2 className="text-4xl space-y-10 font-bold text-center text-zinc-200 mb-4">
                 Featured Projects
               </h2>
-              <p className="text-gray-400 text-center text-lg max-w-2xl mx-auto">
+              <p className="text-gray-400 space-y-10 text-center text-lg max-w-2xl mx-auto">
                 Explore my latest work and personal projects
               </p>
             </BlurFade>
             
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-8 max-w-6xl mx-auto"> {/* Increased gap from gap-6 to gap-8 */}
-              {DATA.projects.map((project, id) => (
-                <BlurFade 
-                  key={project.title} 
-                  delay={BLUR_FADE_DELAY * 12 + id * 0.1}
-                  className="h-full"
-                >
-                  <ProjectCard
-                    href={project.href}
-                    githubUrl={project.githubUrl}
-                    title={project.title}
-                    active={project.active}
-                    description={project.description}
-                    dates={project.dates}
-                    tags={project.technologies}
-                    image={project.image}
-                    video={project.video}
-                    links={project.links}
-                  />
-                </BlurFade>
-              ))}
-            </div>
+            <ProjectCarousel projects={DATA.projects} />
           </div>
         </section>
       </main>
