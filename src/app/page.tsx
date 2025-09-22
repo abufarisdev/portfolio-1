@@ -20,7 +20,7 @@ import {
 import { ChevronLeft, ChevronRight } from "lucide-react";
 
 import ContactForm from "@/components/contact-form";
-import { Mail, Phone } from 'lucide-react';
+import { Navbar } from "@/components/navbar";
 
 const BLUR_FADE_DELAY = 0.04;
 
@@ -176,10 +176,12 @@ function ProjectCarousel({ projects }: { projects: typeof DATA.projects }) {
   );
 }
 
-// Rest of the component remains the same...
+
 export default function Page() {
   return (
     <>
+    {/*Added Navbar*/}
+     <Navbar />
       {/* Floating Light/Dark Toggle */}
       <div className="fixed top-4 right-4 z-50">
         <ModeToggle />
@@ -191,7 +193,7 @@ export default function Page() {
       </div>
 
       {/* Main page content */}
-      <main className="flex flex-col min-h-[100dvh] space-y-6 px-4">
+      <main className="flex flex-col min-h-[100dvh] space-y-5 px-3 pt-0">
         {/* Hero Section */}
         <section id="hero">
           <div className="mx-auto w-full max-w-2xl space-y-4">
