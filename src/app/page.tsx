@@ -208,14 +208,14 @@ export default function Page() {
                 </BlurFade>
 
                 <BlurFadeText
-                  className="max-w-[600px] md:text-md text-zinc-300"
+                  className="max-w-[600px] md:text-md text-muted-foreground"
                   delay={BLUR_FADE_DELAY}
                   text={DATA.description}
                 />
 
                 {/* Summary Section */}
                 <BlurFade delay={BLUR_FADE_DELAY * 4}>
-                  <Markdown className="max-w-full text-pretty text-sm">
+                  <Markdown className="max-w-full text-pretty text-sm text-foreground">
                     {DATA.summary}
                   </Markdown>
                 </BlurFade>
@@ -444,7 +444,7 @@ export default function Page() {
           <div className="flex flex-col gap-y-8">
             {/* Centered Heading */}
             <BlurFade delay={BLUR_FADE_DELAY * 9}>
-              <h2 className="text-4xl font-bold text-center text-zinc-200">
+              <h2 className="text-4xl font-bold text-center text-foreground">
                 Skills
               </h2>
             </BlurFade>
@@ -465,7 +465,7 @@ export default function Page() {
                     {/* Main card content */}
                     <div className="relative bg-card border border-border rounded-xl p-6 h-full transition-all duration-300 hover:border-amber-700/30 group-hover:shadow-lg">
                       {/* Category Heading */}
-                      <h3 className="text-lg font-semibold mb-5 text-center text-zinc-400">
+                      <h3 className="text-lg font-semibold mb-5 text-center text-muted-foreground">
                         {category}
                       </h3>
 
@@ -495,7 +495,7 @@ export default function Page() {
                   {/* Main card content */}
                   <div className="relative bg-card border border-border rounded-xl p-6 h-full transition-all duration-300 hover:border-amber-700/30 group-hover:shadow-lg">
                     {/* Category Heading */}
-                    <h3 className="text-lg font-semibold mb-5 text-center text-zinc-400">
+                    <h3 className="text-lg font-semibold mb-5 text-center text-muted-foreground">
                       DevOps & Cloud
                     </h3>
 
@@ -529,10 +529,10 @@ export default function Page() {
         <section id="projects" className="mt-20">
           <div className="space-y-10 w-full">
             <BlurFade delay={BLUR_FADE_DELAY * 11}>
-              <h2 className="text-4xl space-y-10 font-bold text-center text-zinc-200 mb-4">
+              <h2 className="text-4xl space-y-10 font-bold text-center text-foreground mb-4">
                 Featured Projects
               </h2>
-              <p className="text-gray-400 space-y-10 text-center text-lg max-w-2xl mx-auto">
+              <p className="text-muted-foreground space-y-10 text-center text-lg max-w-2xl mx-auto">
                 Explore my latest work and personal projects
               </p>
             </BlurFade>
@@ -548,8 +548,8 @@ export default function Page() {
   <div className="max-w-4xl mx-auto px-4">
     <BlurFade delay={BLUR_FADE_DELAY * 12}>
       <div className="text-center mb-12">
-        <h2 className="text-4xl font-bold mb-4">Let's Work Together</h2>
-        <p className="text-lg text-muted-foreground text-zinc-400">
+        <h2 className="text-4xl font-bold mb-4 text-foreground">Let's Work Together</h2>
+        <p className="text-lg text-muted-foreground">
           Have a project in mind? I'd love to hear about it.
         </p>
       </div>
