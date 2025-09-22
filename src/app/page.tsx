@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import BlurFade from "@/components/magicui/blur-fade";
 import BlurFadeText from "@/components/magicui/blur-fade-text";
 import { ProjectCard } from "@/components/project-card";
@@ -19,19 +19,37 @@ import {
 } from "@/components/ui/tabs";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 
+import ContactForm from "@/components/contact-form";
+import { Mail, Phone } from 'lucide-react';
+
 const BLUR_FADE_DELAY = 0.04;
 
 // macOS-style carousel component
 function ProjectCarousel({ projects }: { projects: typeof DATA.projects }) {
   const [currentIndex, setCurrentIndex] = useState(0);
+  const [isAnimating, setIsAnimating] = useState(false);
+  const [direction, setDirection] = useState<'left' | 'right' | null>(null);
   
-  // Handle navigation
+  // Handle navigation with smooth animation
+  const navigateProject = useCallback((newIndex: number, navDirection: 'left' | 'right') => {
+    if (isAnimating) return;
+    
+    setIsAnimating(true);
+    setDirection(navDirection);
+    
+    setTimeout(() => {
+      setCurrentIndex(newIndex);
+      setIsAnimating(false);
+      setDirection(null);
+    }, 500);
+  }, [isAnimating]);
+  
   const nextProject = () => {
-    setCurrentIndex((prevIndex) => (prevIndex + 1) % projects.length);
+    navigateProject((currentIndex + 1) % projects.length, 'right');
   };
   
   const prevProject = () => {
-    setCurrentIndex((prevIndex) => (prevIndex - 1 + projects.length) % projects.length);
+    navigateProject((currentIndex - 1 + projects.length) % projects.length, 'left');
   };
   
   // Calculate the projects to display (current, previous, next)
@@ -46,89 +64,119 @@ function ProjectCarousel({ projects }: { projects: typeof DATA.projects }) {
     ];
   };
   
-  // Auto-rotate projects every 5 seconds
+  // Auto-rotate projects every 7 seconds (only when not animating)
   useEffect(() => {
+    if (isAnimating) return;
+    
     const interval = setInterval(() => {
       nextProject();
-    }, 5000);
+    }, 7000);
     
     return () => clearInterval(interval);
-  }, [currentIndex]);
+  }, [currentIndex, isAnimating]);
 
   const visibleProjects = getVisibleProjects();
 
   return (
     <BlurFade delay={BLUR_FADE_DELAY*11}>
-   
-    <div className="w-full max-w-6xl mx-auto">
-      <div className="relative flex items-center justify-center h-[500px]">
-        {/* Navigation buttons */}
-        <button 
-          onClick={prevProject}
-          className="absolute left-4 z-10 p-3 rounded-full bg-background/80 backdrop-blur-sm border border-border hover:bg-accent transition-colors"
-          aria-label="Previous project"
-        >
-          <ChevronLeft className="h-6 w-6" />
-        </button>
-        
-        <button 
-          onClick={nextProject}
-          className="absolute right-4 z-10 p-3 rounded-full bg-background/80 backdrop-blur-sm border border-border hover:bg-accent transition-colors"
-          aria-label="Next project"
-        >
-          <ChevronRight className="h-6 w-6" />
-        </button>
+      <div className="w-full max-w-4xl mx-auto">
+        <div className="relative flex items-center justify-center h-[500px]">
+          {/* Navigation buttons */}
+          <button 
+            onClick={prevProject}
+            className="absolute left-2 z-50 p-3 rounded-full bg-background/80 backdrop-blur-sm border border-border hover:bg-accent transition-all duration-300 hover:scale-110 active:scale-95 shadow-lg"
+            aria-label="Previous project"
+          >
+            <ChevronLeft className="h-5 w-5" />
+          </button>
+          
+          <button 
+            onClick={nextProject}
+            className="absolute right-2 z-50 p-3 rounded-full bg-background/80 backdrop-blur-sm border border-border hover:bg-accent transition-all duration-300 hover:scale-110 active:scale-95 shadow-lg"
+            aria-label="Next project"
+          >
+            <ChevronRight className="h-5 w-5" />
+          </button>
 
-        {/* Project cards */}
-        <div className="flex items-center justify-center w-full h-full">
-          {/* Left card (previous project) */}
-          <div className="absolute left-0 transform -translate-x-1/4 scale-90 opacity-70 transition-all duration-500 z-20 w-80">
-            <ProjectCard
-              {...visibleProjects[0]}
-              tags={visibleProjects[0].technologies}
-              className="pointer-events-none"
-            />
-          </div>
+          {/* Carousel Container */}
+          <div className="relative w-full max-w-2xl mx-auto h-full flex items-center justify-center overflow-hidden">
+            {/* Left card (previous project) - becomes center when moving right */}
+            <div className={`
+              absolute transition-all duration-500 ease-in-out z-20 w-80
+              ${direction === 'right' 
+                ? 'translate-x-0 scale-105 opacity-100 z-30' // Moving to center
+                : direction === 'left' 
+                ? '-translate-x-full scale-90 opacity-0 z-20' // Moving left out
+                : '-translate-x-3/4 scale-90 opacity-70 z-20' // Default left position
+              }
+            `}>
+              <ProjectCard
+                {...visibleProjects[0]}
+                tags={visibleProjects[0].technologies}
+                className={direction !== 'right' ? "pointer-events-none" : ""}
+              />
+            </div>
 
-          {/* Center card (current project) */}
-          <div className="relative z-30 scale-105 transition-all duration-500 w-96">
-            <ProjectCard
-              {...visibleProjects[1]}
-              tags={visibleProjects[1].technologies}
-            />
-          </div>
+            {/* Center card (current project) - moves out when navigating */}
+            <div className={`
+              absolute transition-all duration-500 ease-in-out w-80
+              ${direction === 'right' 
+                ? 'translate-x-full scale-90 opacity-0 z-20' // Moving right out
+                : direction === 'left' 
+                ? '-translate-x-full scale-90 opacity-0 z-20' // Moving left out
+                : 'translate-x-0 scale-105 opacity-100 z-30' // Default center position
+              }
+            `}>
+              <ProjectCard
+                {...visibleProjects[1]}
+                tags={visibleProjects[1].technologies}
+                className={direction !== null ? "pointer-events-none" : ""}
+              />
+            </div>
 
-          {/* Right card (next project) */}
-          <div className="absolute right-0 transform translate-x-1/4 scale-90 opacity-70 transition-all duration-500 z-20 w-80">
-            <ProjectCard
-              {...visibleProjects[2]}
-              tags={visibleProjects[2].technologies}
-              className="pointer-events-none"
-            />
+            {/* Right card (next project) - becomes center when moving left */}
+            <div className={`
+              absolute transition-all duration-500 ease-in-out z-20 w-80
+              ${direction === 'left' 
+                ? 'translate-x-0 scale-105 opacity-100 z-30' // Moving to center
+                : direction === 'right' 
+                ? 'translate-x-full scale-90 opacity-0 z-20' // Moving right out
+                : 'translate-x-3/4 scale-90 opacity-70 z-20' // Default right position
+              }
+            `}>
+              <ProjectCard
+                {...visibleProjects[2]}
+                tags={visibleProjects[2].technologies}
+                className={direction !== 'left' ? "pointer-events-none" : ""}
+              />
+            </div>
           </div>
         </div>
-      </div>
 
-      {/* Dots indicator */}
-      <div className="flex justify-center mt-8 space-x-2">
-        {projects.map((_, index) => (
-          <button
-            key={index}
-            onClick={() => setCurrentIndex(index)}
-            className={`w-3 h-3 rounded-full transition-all duration-300 ${
-              index === currentIndex 
-                ? "bg-primary scale-125" 
-                : "bg-muted-foreground/30 hover:bg-muted-foreground/50"
-            }`}
-            aria-label={`Go to project ${index + 1}`}
-          />
-        ))}
+        {/* Dots indicator */}
+        <div className="flex justify-center mt-8 space-x-2">
+          {projects.map((_, index) => (
+            <button
+              key={index}
+              onClick={() => {
+                const navDirection = index > currentIndex ? 'right' : 'left';
+                navigateProject(index, navDirection);
+              }}
+              className={`w-3 h-3 rounded-full transition-all duration-300 ${
+                index === currentIndex 
+                  ? "bg-primary scale-125" 
+                  : "bg-muted-foreground/30 hover:bg-muted-foreground/50"
+              }`}
+              aria-label={`Go to project ${index + 1}`}
+            />
+          ))}
+        </div>
       </div>
-    </div>
     </BlurFade>
   );
 }
 
+// Rest of the component remains the same...
 export default function Page() {
   return (
     <>
@@ -143,7 +191,7 @@ export default function Page() {
       </div>
 
       {/* Main page content */}
-      <main className="flex flex-col min-h-[100dvh] space-y-6">
+      <main className="flex flex-col min-h-[100dvh] space-y-6 px-4">
         {/* Hero Section */}
         <section id="hero">
           <div className="mx-auto w-full max-w-2xl space-y-4">
@@ -385,12 +433,13 @@ export default function Page() {
             </Tabs>
           </BlurFade>
         </section>
-<br></br>
-<br></br>
 
-          {/* Skills Section */}
+        <br></br>
+        <br></br>
+
+        {/* Skills Section */}
         <section id="skills" className="mt-20"> 
-          <div className="flex flex-col gap-y-8"> {/* Increased from gap-y-10 to gap-y-12 */}
+          <div className="flex flex-col gap-y-8">
             {/* Centered Heading */}
             <BlurFade delay={BLUR_FADE_DELAY * 9}>
               <h2 className="text-4xl font-bold text-center text-zinc-200">
@@ -399,7 +448,7 @@ export default function Page() {
             </BlurFade>
 
             {/* Grid for Skill Categories */}
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 w-full "> {/* Increased gap from gap-5 to gap-6 */}
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 w-full">
               {Object.entries(DATA.skills).map(([category, skills], idx) => (
                 <BlurFade
                   key={category}
@@ -412,14 +461,14 @@ export default function Page() {
                     <div className="absolute -inset-0.5 bg-gradient-to-r from-amber-700/30 to-amber-900/30 rounded-xl opacity-0 group-hover:opacity-50 transition duration-500 blur-sm"></div>
 
                     {/* Main card content */}
-                    <div className="relative bg-card border border-border rounded-xl p-6 h-full transition-all duration-300 hover:border-amber-700/30 group-hover:shadow-lg"> {/* Increased padding from p-5 to p-6 */}
+                    <div className="relative bg-card border border-border rounded-xl p-6 h-full transition-all duration-300 hover:border-amber-700/30 group-hover:shadow-lg">
                       {/* Category Heading */}
-                      <h3 className="text-lg font-semibold mb-5 text-center text-zinc-400"> {/* Increased margin from mb-4 to mb-5 */}
+                      <h3 className="text-lg font-semibold mb-5 text-center text-zinc-400">
                         {category}
                       </h3>
 
                       {/* Skills Badges */}
-                      <div className="flex flex-wrap gap-3 justify-center"> {/* Increased gap from gap-2 to gap-3 */}
+                      <div className="flex flex-wrap gap-3 justify-center">
                         {skills.map((skill) => (
                           <Badge
                             key={skill}
@@ -442,14 +491,14 @@ export default function Page() {
                   <div className="absolute -inset-0.5 bg-gradient-to-r from-amber-700/30 to-amber-900/30 rounded-xl opacity-0 group-hover:opacity-50 transition duration-500 blur-sm"></div>
 
                   {/* Main card content */}
-                  <div className="relative bg-card border border-border rounded-xl p-6 h-full transition-all duration-300 hover:border-amber-700/30 group-hover:shadow-lg"> {/* Increased padding from p-5 to p-6 */}
+                  <div className="relative bg-card border border-border rounded-xl p-6 h-full transition-all duration-300 hover:border-amber-700/30 group-hover:shadow-lg">
                     {/* Category Heading */}
-                    <h3 className="text-lg font-semibold mb-5 text-center  text-zinc-400"> {/* Increased margin from mb-4 to mb-5 */}
+                    <h3 className="text-lg font-semibold mb-5 text-center text-zinc-400">
                       DevOps & Cloud
                     </h3>
 
                     {/* Skills Badges */}
-                    <div className="flex flex-wrap gap-3 justify-center"> {/* Increased gap from gap-2 to gap-3 */}
+                    <div className="flex flex-wrap gap-3 justify-center">
                       <Badge variant="devops" className="hover:scale-105 transition-transform border-0 shadow-md">
                         Docker
                       </Badge>
@@ -474,7 +523,7 @@ export default function Page() {
         <br></br>
         <br></br>
         <br></br>
-        {/* Projects Section with macOS-style Carousel */}
+        {/* Projects Section with Fixed Carousel */}
         <section id="projects" className="mt-20">
           <div className="space-y-10 w-full">
             <BlurFade delay={BLUR_FADE_DELAY * 11}>
@@ -489,6 +538,45 @@ export default function Page() {
             <ProjectCarousel projects={DATA.projects} />
           </div>
         </section>
+        <br></br>
+        <br></br>
+
+{/*Contact Form*/}
+<section id="contact" className="mt-20 py-20 bg-muted/20">
+  <div className="max-w-4xl mx-auto px-4">
+    <BlurFade delay={BLUR_FADE_DELAY * 12}>
+      <div className="text-center mb-12">
+        <h2 className="text-4xl font-bold mb-4">Let's Work Together</h2>
+        <p className="text-lg text-muted-foreground text-zinc-400">
+          Have a project in mind? I'd love to hear about it.
+        </p>
+      </div>
+
+      {/* Social Icons centered at the top */}
+      <div className="flex flex-wrap justify-center gap-4 mb-10">
+        {DATA.contact.social.map((social) => (
+          <a
+            key={social.url}
+            href={social.url}
+            target="_blank"
+            rel="noreferrer"
+            className="flex gap-1 justify-center items-center p-3 rounded-md bg-muted/50 hover:bg-muted transition-all duration-300 hover:shadow-lg hover:shadow-primary/20"
+          >
+            <social.icon className="size-4" />
+          </a>
+        ))}
+      </div>
+
+      {/* Contact form centered below */}
+      <div className="flex justify-center">
+        <div className="w-full max-w-2xl">
+          <ContactForm />
+        </div>
+      </div>
+    </BlurFade>
+  </div>
+</section>
+
       </main>
     </>
   );

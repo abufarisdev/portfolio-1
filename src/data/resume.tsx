@@ -23,26 +23,31 @@ skills: {
 
   contact: {
     email: "abufariskolkata@gmail.com",
+    tel: "+91-9062903003",
     social: [
       {
+        name: "GitHub",
         url: "https://github.com/abufarisdev",
         icon: Icons.github,
 
         navbar: true,
       },
       {
+        name: "LinkedIn",
         url: "https://linkedin.com/in/abufaris",
         icon: Icons.linkedin,
 
         navbar: true,
       },
       {
-        url: "mailto: abufariskolkata@gmail.com",
+        name: "Email",
+        url: "mailto:abufariskolkata@gmail.com",
         icon: Icons.email,
 
         navbar: false,
       },
 {
+  name:"Resume",
   url: "https://drive.google.com/file/d/1r3Fr6Ua7ufFG1awIj9deJci4eyp7uZJn/view?usp=sharing",
   icon: Icons.resume,
 },
@@ -106,6 +111,31 @@ skills: {
       githubUrl : "https://github.com/abufarisdev/crypton.git",
       dates: "September'25",
       active: true,
+      description:"Cryptocurrency dashboard that enables users to track real-time prices, compare coins, set alerts, manage watchlists, and view detailed analytics with interactive charts, offering a responsive and customizable experience for crypto enthusiasts and investors.",
+      technologies: [
+        "React.js",
+        "TypeScript",
+        "Tailwind CSS",
+        "Coingecko API",
+       
+      ],
+      links: [
+        {
+          type: "Website",
+          href: "https://crypton-wheat.vercel.app/",
+          icon: <Icons.globe className="size-3" />,
+  
+        },
+      ],
+      image: "/projects/crypton.png",
+      video: "",
+    },
+     {
+      title: "Crypton",
+      href: "https://crypton-wheat.vercel.app/",
+      githubUrl : "https://github.com/abufarisdev/crypton.git",
+      dates: "September'25",
+      active: true,
       description:
         "Crypton is a cryptocurrency dashboard that enables users to track real-time prices, compare coins, set alerts, manage watchlists, and view detailed analytics with interactive charts, offering a responsive and customizable experience for crypto enthusiasts and investors.",
       technologies: [
@@ -126,6 +156,59 @@ skills: {
       image: "/projects/crypton.png",
       video: "",
     },
+         {
+      title: "Crypton",
+      href: "https://crypton-wheat.vercel.app/",
+      githubUrl : "https://github.com/abufarisdev/crypton.git",
+      dates: "September'25",
+      active: true,
+      description:
+        "Crypton is a cryptocurrency dashboard that enables users to track real-time prices, compare coins, set alerts, manage watchlists, and view detailed analytics with interactive charts, offering a responsive and customizable experience for crypto enthusiasts and investors.",
+      technologies: [
+        "React.js",
+        "TypeScript",
+        "Tailwind CSS",
+        "Coingecko API",
+        "AI",
+      ],
+      links: [
+        {
+          type: "Website",
+          href: "https://crypton-wheat.vercel.app/",
+          icon: <Icons.globe className="size-3" />,
+  
+        },
+      ],
+      image: "/projects/crypton.png",
+      video: "",
+    },
+ {
+      title: "Crypton",
+      href: "https://crypton-wheat.vercel.app/",
+      githubUrl : "https://github.com/abufarisdev/crypton.git",
+      dates: "September'25",
+      active: true,
+      description:
+        "Crypton is a cryptocurrency dashboard that enables users to track real-time prices, compare coins, set alerts, manage watchlists, and view detailed analytics with interactive charts, offering a responsive and customizable experience for crypto enthusiasts and investors.",
+      technologies: [
+        "React.js",
+        "TypeScript",
+        "Tailwind CSS",
+        "Coingecko API",
+        "AI",
+      ],
+      links: [
+        {
+          type: "Website",
+          href: "https://crypton-wheat.vercel.app/",
+          icon: <Icons.globe className="size-3" />,
+  
+        },
+      ],
+      image: "/projects/crypton.png",
+      video: "",
+    },
+    
 
 ],
 } as const;
