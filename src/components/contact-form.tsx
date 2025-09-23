@@ -5,7 +5,8 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
-import { Mail, Phone, Send, CheckCircle, Loader2 } from 'lucide-react';
+import { Send, CheckCircle, Loader2 } from "lucide-react";
+import emailjs from "@emailjs/browser";
 
 export default function ContactForm() {
   const [formData, setFormData] = useState({
@@ -17,7 +18,9 @@ export default function ContactForm() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+  const handleChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
     setFormData({
       ...formData,
       [e.target.name]: e.target.value
@@ -28,17 +31,29 @@ export default function ContactForm() {
     e.preventDefault();
     setIsSubmitting(true);
 
-    // Simulate form submission
-    await new Promise(resolve => setTimeout(resolve, 2000));
-    
-    setIsSubmitting(false);
-    setIsSubmitted(true);
-    
-    // Reset form after 3 seconds
-    setTimeout(() => {
-      setIsSubmitted(false);
+    try {
+      await emailjs.send(
+        "service_j8wu2zm", // ✅ your EmailJS Service ID
+        "template_89h7r2b", // ✅ your Template ID
+        {
+          from_name: formData.name,
+          to_name: "Abu",
+          subject: formData.subject,
+          from_email: formData.email,
+          reply_to: formData.email,
+          message: formData.message
+        },
+        "MsHcmIIHJHzBdht2l" // ✅ your Public Key
+      );
+
+      setIsSubmitted(true);
       setFormData({ name: "", email: "", subject: "", message: "" });
-    }, 3000);
+    } catch (error) {
+      console.error("EmailJS error:", error);
+      alert("Something went wrong. Please try again.");
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   if (isSubmitted) {
@@ -46,7 +61,9 @@ export default function ContactForm() {
       <div className="text-center py-12">
         <CheckCircle className="h-16 w-16 text-green-500 mx-auto mb-4" />
         <h3 className="text-xl font-semibold mb-2">Message Sent!</h3>
-        <p className="text-muted-foreground">Thank you for your message. I'll get back to you soon.</p>
+        <p className="text-muted-foreground">
+          Thank you for your message. I'll get back to you soon.
+        </p>
       </div>
     );
   }
@@ -106,9 +123,9 @@ export default function ContactForm() {
         />
       </div>
 
-      <Button 
-        type="submit" 
-        className="w-full" 
+      <Button
+        type="submit"
+        className="w-full"
         disabled={isSubmitting}
         size="lg"
       >
