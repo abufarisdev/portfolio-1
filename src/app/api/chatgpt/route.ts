@@ -1,39 +1,22 @@
-import { NextRequest, NextResponse } from "next/server";
-import OpenAI from "openai";
+import { NextRequest, NextResponse } from 'next/server';
 
-const openai = new OpenAI({
-  apiKey: process.env.OPENAI_API_KEY,
-});
-
-interface RequestBody {
-  question: string;
+export async function POST(request: NextRequest) {
+  return NextResponse.json(
+    { 
+      error: 'ChatGPT functionality is disabled during build',
+      message: 'This feature will be available after deployment when OPENAI_API_KEY is configured.'
+    },
+    { status: 503 }
+  );
 }
 
-export async function POST(req: NextRequest) {
-  try {
-    const body: RequestBody = await req.json();
-
-    if (!body.question || body.question.trim() === "") {
-      return NextResponse.json(
-        { error: "Question is required." },
-        { status: 400 }
-      );
-    }
-
-    const completion = await openai.chat.completions.create({
-      model: "gpt-4o-mini",
-      messages: [{ role: "user", content: body.question }],
-    });
-
-    const answer =
-      completion.choices[0].message?.content || "Sorry, I couldn't find an answer.";
-
-    return NextResponse.json({ answer });
-  } catch (error: any) {
-    console.error("ChatGPT API error:", error);
-    return NextResponse.json(
-      { error: "Failed to fetch response from ChatGPT." },
-      { status: 500 }
-    );
-  }
+export async function GET() {
+  return NextResponse.json(
+    { 
+      message: 'ChatGPT API endpoint',
+      status: 'Disabled during build',
+      note: 'Configure OPENAI_API_KEY environment variable to enable'
+    },
+    { status: 200 }
+  );
 }
